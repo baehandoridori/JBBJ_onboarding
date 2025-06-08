@@ -249,22 +249,50 @@
         }
 
         /* 팀원 소개 섹션 스타일 */
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 25px; 
-            justify-items: center;
-            padding: 20px 0;
-        }
-        @media (max-width: 900px) { 
-            .team-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-        @media (max-width: 768px) {
-            .team-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        }
-        @media (max-width: 480px) {
-            .team-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        }
+        /* ▼▼▼▼▼ 수정: 반응형 팀 그리드 스타일 ▼▼▼▼▼ */
+.team-grid {
+    display: grid;
+    /* 가장 큰 화면에서는 5열로 시작 */
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 25px; 
+    justify-items: center;
+    padding: 20px 0;
+}
+
+/* 화면이 1200px 이하일 때 4열로 변경 */
+@media (max-width: 1200px) { 
+    .team-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* 화면이 900px 이하일 때 3열로 변경 */
+@media (max-width: 900px) {
+    .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+/* 모바일 화면 (600px 이하)에서 2열로 변경 */
+@media (max-width: 600px) {
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    /* 모바일에서는 이미지와 텍스트 크기를 약간 줄여 가독성 확보 */
+    .team-member-image-link {
+        width: 120px;
+        height: 200px;
+    }
+    .team-member-name {
+        font-size: 0.9em;
+    }
+    .team-member-title {
+        font-size: 0.75em;
+    }
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
         .team-member {
             display: flex;
             flex-direction: column;
