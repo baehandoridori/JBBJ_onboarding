@@ -178,13 +178,14 @@
             color: var(--text-secondary);
             line-height: 1.6;
             transition: color var(--theme-transition-duration) ease;
+            white-space: pre-line; /* 추가: 줄바꿈을 위한 속성 */
         }
         .welcome-card.card-1 .core-values::before { 
-            content: "STUDIO JBBJ에 오신 애니메이터 여러분, 환영합니다! 🚀\A\A이곳이 바로 그 '사우스 코리안 파크'가 만들어지는, 바로 그 곳입니다. 지금부터 여러분의 멋진 여정이 시작될 겁니다?ㅋㅋ";
+            content: "STUDIO JBBJ에 오신 것을 진심으로 환영합니다!\A\A 스튜디오 장삐쭈는 2016 년에 설립되어 \A유튜브 '장삐쭈' 채널을 통해 시청자들에게 차원이 다른 색다른 재미를 선사해 왔습니다. \A그리고 2025년 현재 우리는, 새로운 세계 [ 사우스 코리안 파크 ] 에서 즐거운 도전을 이어 나가고 있습니다!";
         }
-        .welcome-card.card-2 .core-values::before { content: "저희 스튜디오 장삐쭈는 많은 사랑을 받은 유튜브 채널 '장삐쭈'에서, 자체 IP '사우스 코리안 파크' 시작했습니다. STUDIO JBBJ가 꾸는 꿈이자, 여러분과 함께 만들어갈 빛나는 비전입니다!"; }
-        .welcome-card.card-3 .core-values::before { content: "'상호 존중(리스펙)'입니다! 우리는 언제나 활짝 열린 분위기에서 자유롭고 솔직학데데 소통하며, 모든 제작자의 빛나는 크리에이티브를 소중히 여깁니다. 동료가 작업에 쏟은 시간과 반짝이는 기술, 그리고 맡은 역할에 대한 깊은 존중은 우리 스튜디오의 가장 중요한 핵심 가치입니다.\A\A여기서는 당신의 목소리가 힘을 갖고, 당신의 재능이 마음껏 빛날 수 있습니다!"; }
-        .welcome-card.card-4 .core-values::before { content: "이제 여러분도 이 멋진 여정의 주인공입니다! 서로 존중하고 지지하는 문화 속에서 여러분의 잠재력을 마음껏 펼치고, 사코팍 만들들 생각을 하니 벌써부터 가슴이 뛰지 않나요?\A\A여러분의 빛나는 아이디어가 현실이 되는 곳, STUDIO JBBJ가 당신의 힘찬 첫걸음과 성장을 뜨겁게 응원합니다!"; }
+        .welcome-card.card-2 .core-values::before { content: "[사우스 코리안 파크] 는 지난 2 년 동안 \A약 200편의 단편과 13편의 오리지날 시리즈를 선보였으며, \A 10 만 명 이상의 멤버십 팬들과 함께하는 \A대한민국 최고의 블랙 코미디 애니메이션입니다. \A 대한민국을 넘어선 글로벌 무대에서 ~~냄과 함께 펼처 나갈 위대한 여정이 정말 기대되네요!"; }
+        .welcome-card.card-3 .core-values::before { content: "우리의 핵심 가치는 바로 '상호 존중(리스펙)' 입니다! \A\A[시간 박은 사람에게 ' 무조건 ' 리스펙 하라] 는 삐쭈님 말씀에 따라 \A모두가 자신보다 분야별로 시간을 박은 지원들에게 무한 리스펙하며 \A시간을 박은 사람도 다른 직원들의 의견을 가볍게 여기지 않고 한 번 더 고민해 보는 \A열린 분위기 속에서 모든 창작이 이루어집니다. \A모두의 목소리와 열정이 존중받는 스장에서 ~~님의 재능을 마음껏 펼쳐 주세요!"; }
+        .welcome-card.card-4 .core-values::before { content: "이제 ~~ 님도 이 멋진 여정의 주인공입니다. \A서로 존중하고 지지하며, 함게 멋진 작품을 만드는 \A모습을 상상하니 벌서 가슴이 뛰는 것 같네요! \A여러분의 빛나는 아이디어가 현실이 되는 곳,\A STUDIO JBBJ 가 ~~ 님의 힘찬 첫 걸음을 뜨겁게 응원합니다!"; }
 
         .welcome-card .welcome-image-area {
             flex-basis: 40%;
@@ -637,11 +638,14 @@
                     <div class="welcome-card card-1 active-card"> <div class="welcome-text-area">
                             <p class="core-values"></p>
                         </div>
-                        <div class="welcome-image-area"></div>
                     </div>
                     <div class="welcome-card card-2">
                         <div class="welcome-text-area">
                             <p class="core-values"></p>
+                        </div>
+                        
+                        <div class="welcome-image-area">
+                            <img src="../images/리스펙.png" alt="리스펙 이미지" style="width: 100%; height: 100%; object-fit: contain;">
                         </div>
                     </div>
                     <div class="welcome-card card-3">
