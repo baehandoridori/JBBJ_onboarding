@@ -13,7 +13,7 @@
             --page-bg: #1A1A1A; --text-primary: #F0E68C; --text-secondary: #cccccc; --text-muted: #BDBDBD;
             --accent-yellow: #FFD700; --box-bg: #282828; --box-shadow: rgba(0,0,0,0.3);
             --icon-wrapper-bg: #333; --icon-border: #FFD700; --tooltip-bg: #3a3a3a; --tooltip-text: #FFFFFF;
-            --theme-toggle-bg: #333; --theme-toggle-icon: #FFD700; --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+            --theme-toggle-bg: #333; --theme-toggle-icon: #FFD700; --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', sans-serif;
         }
         [data-theme="light"] {
             --page-bg: #F8F9FA; --text-primary: #212529; --text-secondary: #555555; --text-muted: #6c757d;
@@ -32,22 +32,27 @@
         .page-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 80px; }
         .section { width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px; box-sizing: border-box; position: relative; }
         .section-welcome { justify-content: flex-start; padding-top: 15vh; padding-bottom: 15vh; }
-        .section-roadmap { justify-content: flex-start; padding-top: 10vh; padding-bottom: 10vh; margin-bottom: 20px; }
-        .section-welcome h1.main-welcome-title { font-size: 3em; color: var(--accent-yellow); margin-bottom: 30px; text-shadow: 2px 2px 8px var(--box-shadow); }
+        .section-roadmap { justify-content: flex-start; padding-top: 10vh; padding-bottom: 10vh; }
         
-        .card-slider-container { position: relative; border-radius: 20px; max-width: 1200px; /* 최대너비 수정 */ width: 90%; overflow: hidden; z-index: 10; min-height: 420px; /* 최소 높이 설정 */ display: flex; align-items: center; }
-        .card-slider-wrapper { display: flex; align-items: center; transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-        .welcome-card { width: 70%; min-width: 70%; flex-shrink: 0; box-sizing: border-box; padding: 40px; margin: 0 10px; background-color: var(--box-bg); border-radius: 20px; box-shadow: 0 6px 20px var(--box-shadow); display: flex; justify-content: space-between; align-items: center; opacity: 0.5; transform: scale(0.85); transition: opacity 0.5s ease, transform 0.5s ease, background-color 0.3s ease, box-shadow 0.3s ease; min-height: 350px; /* 최소 높이 설정 */ }
-        .welcome-card.active-card { opacity: 1; transform: scale(1); z-index: 2; box-shadow: 0 10px 30px var(--box-shadow); }
-        .welcome-card .welcome-text-area { flex-basis: 100%; text-align: left; }
-        .welcome-card.card-1 .welcome-text-area { text-align: center; } /* 1번 카드만 가운데 정렬 */
-        .welcome-card .core-values { font-size: 1.1em; color: var(--text-secondary); line-height: 1.7; white-space: pre-line; }
-        .newbie-name { color: var(--accent-yellow); font-weight: bold; }
+        .main-welcome-title { font-size: 3em; color: var(--accent-yellow); margin-bottom: 30px; text-shadow: 2px 2px 8px var(--box-shadow); }
+        .roadmap-title { font-size: 2.8em; color: var(--accent-yellow); font-weight: bold; margin-bottom: 50px; text-shadow: 1px 1px 6px var(--box-shadow); }
 
-        .welcome-image-area { flex-basis: 40%; height: 100%; display: flex; align-items: center; }
+        .card-slider-container { position: relative; max-width: 1200px; width: 90%; z-index: 10; display: flex; align-items: center; min-height: 420px; }
+        .card-slider-wrapper { display: flex; align-items: center; transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .welcome-card { width: 70%; min-width: 70%; flex-shrink: 0; box-sizing: border-box; padding: 40px; margin: 0 10px; background-color: var(--box-bg); border-radius: 20px; box-shadow: 0 6px 20px var(--box-shadow); display: flex; justify-content: center; align-items: center; opacity: 0.5; transform: scale(0.85); transition: opacity 0.5s ease, transform 0.5s ease; min-height: 350px; }
+        .welcome-card.active-card { opacity: 1; transform: scale(1); z-index: 2; box-shadow: 0 10px 30px var(--box-shadow); }
+        
+        .welcome-text-area { flex-basis: 100%; text-align: left; }
+        .welcome-card.card-1 .welcome-text-area,
+        .welcome-card.card-4 .welcome-text-area { text-align: center; }
+        
+        .core-values { font-size: 1.1em; color: var(--text-secondary); line-height: 1.7; }
+        .newbie-name { color: var(--accent-yellow); font-weight: bold; }
+        
+        .welcome-image-area { flex-basis: 40%; height: 100%; display: flex; align-items: center; margin-left: 25px; }
         .welcome-image-area img { width: 100%; height: auto; max-height: 300px; object-fit: contain; }
-        .welcome-card .welcome-text-area + .welcome-image-area { margin-left: 25px; }
-        .welcome-card.card-2 .welcome-text-area, .welcome-card.card-3 .welcome-text-area { flex-basis: 55%; }
+        .welcome-card.card-2 .welcome-text-area,
+        .welcome-card.card-3 .welcome-text-area { flex-basis: 55%; }
         
         .card-nav-buttons { position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 15; }
         .card-nav-button { background-color: rgba(0,0,0,0.4); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); border-radius: 50%; width: 32px; height: 32px; font-size: 0.8em; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s ease; }
@@ -55,7 +60,8 @@
         .card-nav-button:disabled { opacity: 0.4; cursor: not-allowed; transform: scale(1); }
         
         /* 로드맵 섹션 스타일 (생략) */
-        .roadmap-container-wrapper { background-color: var(--box-bg); padding: 40px 30px; border-radius: 20px; box-shadow: 0 8px 25px var(--box-shadow); width: 90%; max-width: 1200px; margin-bottom: 30px; } .roadmap-container { display: flex; justify-content: center; align-items: flex-start; gap: 35px; padding: 10px 0; width: 100%; flex-wrap: wrap; margin-bottom: 30px; } .roadmap-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 110px; position: relative; cursor: pointer; } .roadmap-item .icon-wrapper { width: 80px; height: 80px; background-color: var(--icon-wrapper-bg); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; border: 3px solid var(--icon-border); box-shadow: 0 5px 15px var(--box-shadow); transition: all 0.3s ease; } .roadmap-item:hover .icon-wrapper { transform: translateY(-5px) scale(1.08); box-shadow: 0 12px 25px rgba(255, 215, 0, 0.35); } .roadmap-item i { font-size: 2.5em; color: var(--accent-yellow); } .roadmap-item .item-title { font-size: calc(0.9em + 3px); color: var(--accent-yellow); font-weight: bold; } .roadmap-logo-img { width: 75%; height: auto; object-fit: contain; } .tooltip { position: absolute; bottom: 115px; left: 50%; transform: translateX(-50%); background-color: var(--tooltip-bg); color: var(--tooltip-text); padding: 10px 15px; border-radius: 8px; box-shadow: 0 5px 15px var(--box-shadow); width: 250px; font-size: 0.8em; line-height: 1.5; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 20; pointer-events: none; } .tooltip::after { content: ""; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); border-width: 8px; border-style: solid; border-color: var(--tooltip-bg) transparent transparent transparent; } .roadmap-item:hover .tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(-10px); } .roadmap-intro-text { font-size: 1.05em; color: var(--text-secondary); line-height: 1.7; max-width: 800px; margin: 0 auto; text-align: center; } .next-step-button-wrapper { perspective: 800px; position: relative; margin-top: 50px; } .next-step-button { padding: 15px 30px; font-size: 1.2em; font-weight: bold; color: #1A1A1A; background-color: var(--accent-yellow); border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; transform-style: preserve-3d; box-shadow: 0 5px 15px var(--box-shadow); } [data-theme="light"] .next-step-button { color: #FFFFFF; } .next-step-button:hover { box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4); } .footer-logo { margin-top: 60px; margin-bottom: 30px; text-align: center; } .footer-logo img { width: 120px; height: auto; opacity: 0.6; transition: opacity 0.3s ease; } .footer-logo img:hover { opacity: 1; }
+        .roadmap-container-wrapper { background-color: var(--box-bg); padding: 40px 30px; border-radius: 20px; box-shadow: 0 8px 25px var(--box-shadow); width: 90%; max-width: 1200px; margin-bottom: 30px; } .roadmap-container { display: flex; justify-content: center; align-items: flex-start; gap: 35px; padding: 10px 0; width: 100%; flex-wrap: wrap; margin-bottom: 30px; } .roadmap-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 110px; position: relative; cursor: pointer; } .roadmap-item .icon-wrapper { width: 80px; height: 80px; background-color: var(--icon-wrapper-bg); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; border: 3px solid var(--icon-border); box-shadow: 0 5px 15px var(--box-shadow); transition: all 0.3s ease; } .roadmap-item:hover .icon-wrapper { transform: translateY(-5px) scale(1.08); box-shadow: 0 12px 25px rgba(255, 215, 0, 0.35); } .roadmap-item i { font-size: 2.5em; color: var(--accent-yellow); } .roadmap-item .item-title { font-size: calc(0.9em + 3px); color: var(--accent-yellow); font-weight: bold; } .roadmap-logo-img { width: 75%; height: auto; object-fit: contain; } .tooltip { position: absolute; bottom: 115px; left: 50%; transform: translateX(-50%); background-color: var(--tooltip-bg); color: var(--tooltip-text); padding: 10px 15px; border-radius: 8px; box-shadow: 0 5px 15px var(--box-shadow); width: 250px; font-size: 0.8em; line-height: 1.5; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 20; pointer-events: none; } .tooltip::after { content: ""; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); border-width: 8px; border-style: solid; border-color: var(--tooltip-bg) transparent transparent transparent; } .roadmap-item:hover .tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(-10px); } .roadmap-intro-text { font-size: 1.05em; color: var(--text-secondary); line-height: 1.7; max-width: 800px; margin: 0 auto; text-align: center; } .next-step-button-wrapper { perspective: 800px; position: relative; margin-top: 50px; } .next-step-button { padding: 15px 30px; font-size: 1.2em; font-weight: bold; color: #1A1A1A; background-color: var(--accent-yellow); border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; transform-style: preserve-3d; box-shadow: 0 5px 15px var(--box-shadow); } [data-theme="light"] .next-step-button { color: #FFFFFF; } .next-step-button:hover { box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4); } .next-step-button-wrapper .tooltip-next { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); background-color: var(--tooltip-bg); color: var(--tooltip-text); padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 12px var(--box-shadow); width: auto; min-width: 280px; max-width: 320px; font-size: 0.85em; line-height: 1.5; text-align: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 20; pointer-events: none; } .next-step-button-wrapper:hover .tooltip-next { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(-5px); } .next-step-button-wrapper .tooltip-next::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%) rotate(180deg); border-width: 8px; border-style: solid; border-color: var(--tooltip-bg) transparent transparent transparent; }
+        .footer-logo { margin-top: 60px; margin-bottom: 30px; text-align: center; } .footer-logo img { width: 120px; height: auto; opacity: 0.6; transition: opacity 0.3s ease; } .footer-logo img:hover { opacity: 1; }
         body::-webkit-scrollbar { width: 8px; } body::-webkit-scrollbar-track { background: var(--page-bg); } body::-webkit-scrollbar-thumb { background-color: var(--accent-yellow); border-radius: 10px; }
         .initial-fade-in { opacity: 0; transform: translateY(50px); } .initial-fade-in.is-visible { opacity: 1; transform: translateY(0); }
     </style>
@@ -119,12 +125,15 @@
 
             <section class="section section-roadmap">
                 <h2 class="roadmap-title initial-fade-in">온보딩 로드맵</h2>
-                <div class="roadmap-container-wrapper initial-fade-in" id="roadmapContainerWrapper">
+                <div class="roadmap-container-wrapper initial-fade-in">
                     <div class="roadmap-container">
                         <div class="roadmap-item" onclick="location.href='3_mento.html'"><div class="icon-wrapper"><i class="fas fa-user-tie"></i></div><span class="item-title">멘토 소개</span><div class="tooltip">온보딩 과정과 향후 3개월간의 과정에서 여러분의 적응과 교육을 도와줄 담당 멘토를 소개합니다!</div></div>
                         <div class="roadmap-item" onclick="location.href='4_memberlist.html'"><div class="icon-wrapper"><i class="fas fa-users"></i></div><span class="item-title">팀원 소개</span><div class="tooltip">앞으로 함께 할 멋진 팀원들을 소개합니다. 모두 개성있고 착한 사람들이니 잘 다가가 보도록 도와드려요.</div></div>
                         <div class="roadmap-item" onclick="location.href='5_process.html'"><div class="icon-wrapper"><i class="fas fa-film"></i></div><span class="item-title">제작 과정</span><div class="tooltip">현재 스튜디오 장삐쭈의 사코팍 제작 과정에 대하여 소개해 드립니다. 각 과정에서 일어나는 필수적인 항목을 체크하고 이해해나가다 보면 빠르게 적응할 수 있어요.</div></div>
-                        <div class="roadmap-item" onclick="location.href='7_final_quiz.html'"><div class="icon-wrapper"><i class="fas fa-question-circle"></i></div><span class="item-title">최종 점검</span><div class="tooltip">온보딩을 모두 마친 당신, 이제 스장인으로 거듭날 시간입니다! 간단한 퀴즈를 통해 최종 점검을 해보세요.</div></div>
+                        <div class="roadmap-item" onclick="location.href='7_final_quiz.html'">
+                            <div class="icon-wrapper"><img src="../images/JBBJ_LOGO_Y.png" alt="필수 정보 로고" class="roadmap-logo-img"></div>
+                            <span class="item-title">필수 정보</span><div class="tooltip">사내 출퇴근 및 여러분이 알아야하는 정보에 대해서 알려드립니다.</div>
+                        </div>
                     </div>
                     <p class="roadmap-intro-text">Studio jbbj의 온보딩 로드맵에 오신 것을 환영합니다! 각 단계를 통해 여러분이 우리 스튜디오에 잘 적응하고, 필요한 지식과 정보를 얻어 가실 수 있도록 안내해 드릴게요. 궁금한 점이 있다면 언제든 멘토에게 문의해주세요. 함께 즐겁게 성장해나가요!</p>
                 </div>
@@ -144,17 +153,16 @@
             
             // 텍스트 설정
             const cardTexts = {
-                card1: `STUDIO JBBJ에 오신 것을 진심으로 환영합니다!\n\n스튜디오 장삐쭈는 2016 년에 설립되어\n유튜브 '장삐쭈' 채널을 통해 시청자들에게 차원이 다른 색다른 재미를 선사해 왔습니다.\n그리고 2025년 현재 우리는, 새로운 세계 [ 사우스 코리안 파크 ] 에서 즐거운 도전을 이어 나가고 있습니다!`,
-                card2: `[사우스 코리안 파크] 는 지난 2 년 동안\n약 200편의 단편과 13편의 오리지날 시리즈를 선보였으며,\n10 만 명 이상의 멤버십 팬들과 함께하는\n대한민국 최고의 블랙 코미디 애니메이션입니다.\n대한민국을 넘어선 글로벌 무대에서 <span class="newbie-name">${newbieName}</span>님과 함께 펼쳐 나갈 위대한 여정이 정말 기대되네요!`,
-                card3: `우리의 핵심 가치는 바로 '상호 존중(리스펙)' 입니다!\n\n[시간 박은 사람에게 '무조건' 리스펙 하라] 는 삐쭈님 말씀에 따라\n모두가 자신보다 분야별로 시간을 박은 지원들에게 무한 리스펙하며\n시간을 박은 사람도 다른 직원들의 의견을 가볍게 여기지 않고 한 번 더 고민해 보는\n열린 분위기 속에서 모든 창작이 이루어집니다.\n모두의 목소리와 열정이 존중받는 스장에서 <span class="newbie-name">${newbieName}</span>님의 재능을 마음껏 펼쳐 주세요!`,
-                card4: `이제 <span class="newbie-name">${newbieName}</span> 님도 이 멋진 여정의 주인공입니다.\n서로 존중하고 지지하며, 함께 멋진 작품을 만드는\n모습을 상상하니 벌써 가슴이 뛰는 것 같네요!\n여러분의 빛나는 아이디어가 현실이 되는 곳,\nSTUDIO JBBJ 가 <span class="newbie-name">${newbieName}</span> 님의 힘찬 첫 걸음을 뜨겁게 응원합니다!`
+                card1: `STUDIO JBBJ에 오신 것을 진심으로 환영합니다!<br><br>스튜디오 장삐쭈는 2016 년에 설립되어<br>유튜브 '장삐쭈' 채널을 통해 시청자들에게 차원이 다른 색다른 재미를 선사해 왔습니다.<br>그리고 2025년 현재 우리는, 새로운 세계 [ 사우스 코리안 파크 ] 에서 즐거운 도전을 이어 나가고 있습니다!`,
+                card2: `[사우스 코리안 파크] 는 지난 2 년 동안<br>약 200편의 단편과 13편의 오리지날 시리즈를 선보였으며,<br>10 만 명 이상의 멤버십 팬들과 함께하는<br>대한민국 최고의 블랙 코미디 애니메이션입니다.<br>대한민국을 넘어선 글로벌 무대에서 <span class="newbie-name">${newbieName}</span>님과 함께 펼쳐 나갈 위대한 여정이 정말 기대되네요!`,
+                card3: `우리의 핵심 가치는 바로 '상호 존중(리스펙)' 입니다!<br><br>[시간 박은 사람에게 '무조건' 리스펙 하라] 는 삐쭈님 말씀에 따라<br>모두가 자신보다 분야별로 시간을 박은 지원들에게 무한 리스펙하며<br>시간을 박은 사람도 다른 직원들의 의견을 가볍게 여기지 않고 한 번 더 고민해 보는<br>열린 분위기 속에서 모든 창작이 이루어집니다.<br>모두의 목소리와 열정이 존중받는 스장에서 <span class="newbie-name">${newbieName}</span>님의 재능을 마음껏 펼쳐 주세요!`,
+                card4: `이제 <span class="newbie-name">${newbieName}</span> 님도 이 멋진 여정의 주인공입니다.<br>서로 존중하고 지지하며, 함께 멋진 작품을 만드는<br>모습을 상상하니 벌써 가슴이 뛰는 것 같네요!<br>여러분의 빛나는 아이디어가 현실이 되는 곳,<br>STUDIO JBBJ 가 <span class="newbie-name">${newbieName}</span> 님의 힘찬 첫 걸음을 뜨겁게 응원합니다!`
             };
 
             document.getElementById('card1Text').innerHTML = cardTexts.card1;
             document.getElementById('card2Text').innerHTML = cardTexts.card2;
             document.getElementById('card3Text').innerHTML = cardTexts.card3;
             document.getElementById('card4Text').innerHTML = cardTexts.card4;
-
 
             // 카드 슬라이더 로직
             const sliderContainer = document.getElementById('welcomeCardSlider');
@@ -164,24 +172,11 @@
             const cards = document.querySelectorAll('.welcome-card');
             let currentCardIndex = 0;
             const totalCards = cards.length;
-            let cardWidth = 0; 
-            let containerWidth = 0;
-            function calculateCardWidth() {
-                if (cards.length > 0) {
-                    const firstCard = cards[0];
-                    const cardStyle = window.getComputedStyle(firstCard);
-                    cardWidth = firstCard.offsetWidth + parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
-                }
-                containerWidth = sliderContainer.offsetWidth;
-            }
             function updateSliderPosition() {
-                calculateCardWidth(); 
-                const offsetToCenterCurrentCard = (containerWidth - cards[currentCardIndex].offsetWidth) / 2;
-                const newX = offsetToCenterCurrentCard - (currentCardIndex * cardWidth);
-                sliderWrapper.style.transform = `translateX(${newX}px)`;
-                cards.forEach((card, index) => {
-                    card.classList.toggle('active-card', index === currentCardIndex);
-                });
+                const cardWidth = cards[0].offsetWidth + parseInt(getComputedStyle(cards[0]).marginLeft) * 2;
+                const offset = (sliderContainer.offsetWidth - cards[0].offsetWidth) / 2;
+                sliderWrapper.style.transform = `translateX(${offset - currentCardIndex * cardWidth}px)`;
+                cards.forEach((card, index) => card.classList.toggle('active-card', index === currentCardIndex));
                 prevCardButton.disabled = currentCardIndex === 0;
                 nextCardButton.disabled = currentCardIndex === totalCards - 1;
             }
@@ -206,5 +201,3 @@
     </script>
 </body>
 </html>
-네가 보내준 코드를 그대로 반영했는데, 이름이 표기되지 않고 ~~님으로만 나와.
-그리고 content: ""; 에서 줄바꿈도 제대로 표기가 안 돼. 어떻게 해결해야 할까?
