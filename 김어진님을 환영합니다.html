@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>환영합니다! 스튜디오 장삐쭈 온보딩 페이지</title>
+    <style>
+        /* 기본 스타일 초기화 및 전체 폰트 설정 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Spoqa Han Sans Neo', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background-color: #1A1A1A;
+            color: #F0E68C;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #company-logo {
+            display: block;
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin-bottom: 20px;
+            animation: logoGlow 3s infinite alternate ease-in-out, 
+                       fadeInAppear 1s ease-out 0.2s backwards;
+        }
+
+        @keyframes logoGlow {
+            from { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)); }
+            to   { filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.6)); }
+        }
+
+        .title-header h2 {
+            font-size: 1.8em;
+            color: #F0E68C;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            animation: fadeInAppear 1s ease-out 0.5s backwards; 
+        }
+        
+        @keyframes fadeInAppear {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        
+        .input-section {
+            width: 100%;
+            max-width: 550px;
+            margin-bottom: 40px;
+            animation: fadeInAppear 1s ease-out 0.7s backwards; 
+        }
+        .welcome-text {
+            font-size: 1.1em;
+            color: #cccccc;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1em;
+            color: #F0E68C;
+            font-weight: 500;
+        }
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #282828;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1.1em;
+            font-family: inherit;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .input-field::placeholder {
+            color: #777;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .input-field.placeholder-fade::placeholder {
+            opacity: 0;
+        }
+        .email-domain {
+            margin-left: 10px;
+            font-size: 1.2em;
+            color: var(--accent-yellow);
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .button-wrapper {
+            margin-top: 1em;
+            perspective: 100px; 
+        }
+
+        .interactive-button {
+            padding: 18px 35px; 
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1A1A1A; 
+            background-color: #FFD700; 
+            border: none;
+            border-radius: 12px; 
+            cursor: pointer;
+            transform-style: preserve-3d; 
+            position: relative; 
+            overflow: hidden; 
+            transition: transform 0.1s linear, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease, filter 0.3s ease; 
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.35); 
+            animation: fadeInAppear 1s ease-out 1s backwards;
+        }
+        .interactive-button:hover { 
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.6); 
+        }
+        .interactive-button::before {
+            content: "";
+            position: absolute;
+            top: 0; left: -150%; width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transform: skewX(-30deg); 
+            animation: holographic-shine 3.5s infinite linear; 
+            animation-delay: 1s; 
+        }
+
+        .interactive-button.disabled {
+            background-color: #555;
+            color: #888;
+            cursor: not-allowed;
+            box-shadow: none;
+            filter: grayscale(50%);
+        }
+        .interactive-button.disabled:hover {
+            box-shadow: none;
+        }
+        .interactive-button.disabled::before {
+            display: none;
+        }
+
+        @keyframes holographic-shine {
+            0% { left: -150%; opacity: 0.7; }
+            40% { left: 150%; opacity: 0.7; }
+            40.01% { opacity: 0; }
+            100% { left: 150%; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <img src="images/JBBJ_LOGO_Y.png" alt="STUDIO JBBJ 로고" id="company-logo">
+        
+        <header class="title-header">
+            <h2>신입사원 온보딩용 페이지</h2>
+        </header>
+        
+        <div class="input-section">
+            <p class="welcome-text">
+                안녕하세요. 당신과 함께하게 되어 진심으로 기쁘고 환영합니다.<br>
+                온보딩에 앞서, 이제부터 함께 해 나갈 당신의 이름을 알려주세요!
+            </p>
+            <div class="input-group">
+                <label for="nameInput">어떻게 불러드리면 될까요?</label>
+                <input type="text" id="nameInput" class="input-field" placeholder="장삐쭈">
+            </div>
+            <div class="input-group">
+                <label for="emailInput">스튜디오에서 사용할 이메일 주소를 정해주세요.</label>
+                <div class="input-wrapper">
+                    <input type="text" id="emailInput" class="input-field" placeholder="welcome">
+                    <span class="email-domain">@studiojbbj.com</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-wrapper">
+            <button id="onboarding-button" class="interactive-button disabled" disabled>온보딩 시작</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.getElementById('onboarding-button');
+            const nameInput = document.getElementById('nameInput');
+            const emailInput = document.getElementById('emailInput');
+
+            // --- 플레이스홀더 애니메이션 로직 ---
+            const placeholderNames = ["박로봇", "윤서준", "정혁", "김도윤", "공미영", "윤광철", "장삐쭈"];
+            let placeholderInterval = setInterval(changePlaceholder, 2000);
+            function changePlaceholder() {
+                if (document.activeElement === nameInput || nameInput.value !== '') return;
+                nameInput.classList.add('placeholder-fade');
+                setTimeout(() => {
+                    let newName;
+                    do { newName = placeholderNames[Math.floor(Math.random() * placeholderNames.length)]; } 
+                    while (newName === nameInput.placeholder);
+                    nameInput.placeholder = newName;
+                    nameInput.classList.remove('placeholder-fade');
+                }, 400);
+            }
+            nameInput.addEventListener('focus', () => clearInterval(placeholderInterval));
+
+            // --- 버튼 활성화 로직 ---
+            function checkInputsAndToggleButtonState() {
+                const isNameFilled = nameInput.value.trim() !== '';
+                const isEmailFilled = emailInput.value.trim() !== '';
+                if (isNameFilled && isEmailFilled) {
+                    button.classList.remove('disabled');
+                    button.disabled = false;
+                } else {
+                    button.classList.add('disabled');
+                    button.disabled = true;
+                }
+            }
+            nameInput.addEventListener('input', checkInputsAndToggleButtonState);
+            emailInput.addEventListener('input', checkInputsAndToggleButtonState);
+            
+            if (button) {
+                // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+                // 수정된 부분: 온보딩 시작 버튼 클릭 이벤트 (웹훅 수정)
+                // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+                button.addEventListener('click', () => { // async 제거 가능
+                    if (button.disabled) {
+                        alert('이름과 이메일 주소를 모두 채워주셔야 시작할 수 있어요! 😉');
+                        return;
+                    }
+                    // 버튼 비활성화 및 텍스트 변경 (중복 클릭 방지)
+                    button.disabled = true;
+                    button.textContent = "전송 중...";
+
+                    const nameValue = nameInput.value.trim();
+                    const emailValue = emailInput.value.trim();
+                    localStorage.setItem('newbieName', nameValue);
+                    localStorage.setItem('newbieEmail', emailValue + '@studiojbbj.com');
+
+                    // --- 웹훅 전송 로직 시작 ---
+                    const webhookUrl = 'https://hooks.slack.com/triggers/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';
+                    const payload = {
+                        new_NAME: nameValue,
+                        new_ID: emailValue
+                    };
+
+                    // [핵심] 브라우저 CORS 정책을 우회하기 위해 no-cors 모드 사용
+                    fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload),
+                        mode: 'no-cors' // 이 옵션이 중요합니다!
+                    }).catch(error => {
+                        // no-cors 모드에서는 응답을 받을 수 없으므로, 이 catch 블록은
+                        // 주로 네트워크 연결 자체의 문제(오프라인 등)를 잡습니다.
+                        console.error('웹훅 전송 중 네트워크 오류 발생:', error);
+                    });
+                    // --- 웹훅 전송 로직 끝 ---
+
+                    // 웹훅 전송을 기다리지 않고, 약간의 딜레이 후 바로 다음 페이지로 이동
+                    setTimeout(() => {
+                        window.location.href = 'pages/2_overview.html';
+                    }, 500); // 0.5초 딜레이
+                });
+                // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+                // 3D 효과 로직
+                document.addEventListener('mousemove', (e) => {
+                    if (!button.disabled) {
+                        const rect = button.getBoundingClientRect(); 
+                        const influence = Math.max(0, 1 - (Math.sqrt(Math.pow(e.clientX - (rect.left + rect.width / 2), 2) + Math.pow(e.clientY - (rect.top + rect.height / 2), 2)) / 400));
+                        const rotateY = ((e.clientX - (rect.left + rect.width / 2)) / 10) * influence; 
+                        const rotateX = (-(e.clientY - (rect.top + rect.height / 2)) / 10) * influence; 
+                        const translateZ = 20 * influence;
+                        button.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(${translateZ}px)`;
+                    } else {
+                        button.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio jbbj 둘러보기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 테마 색상 변수 정의 */
+        :root {
+            --page-bg: #1A1A1A;
+            --text-primary: #F0E68C;
+            --text-secondary: #cccccc;
+            --text-muted: #BDBDBD;
+            --accent-yellow: #FFD700;
+            --box-bg: #282828;
+            --box-shadow: rgba(0,0,0,0.3);
+            --icon-wrapper-bg: #333;
+            --icon-border: #FFD700;
+            --tooltip-bg: #3a3a3a;
+            --tooltip-text: #FFFFFF;
+            --scrollbar-track: #1A1A1A;
+            --scrollbar-thumb: #FFD700;
+            --theme-toggle-bg: #333;
+            --theme-toggle-icon: #FFD700;
+            --theme-transition-duration: 0.3s;
+            --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+        }
+
+        [data-theme="light"] {
+            --page-bg: #F8F9FA;
+            --text-primary: #212529;
+            --text-secondary: #555555;
+            --text-muted: #6c757d;
+            --accent-yellow: #EAA600;
+            --box-bg: #FFFFFF;
+            --box-shadow: rgba(0,0,0,0.1);
+            --icon-wrapper-bg: #f0f0f0;
+            --icon-border: #EAA600;
+            --tooltip-bg: #f8f8f8;
+            --tooltip-text: #333333;
+            --scrollbar-track: #e9ecef;
+            --scrollbar-thumb: #EAA600;
+            --theme-toggle-bg: #e0e0e0;
+            --theme-toggle-icon: #EAA600;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-family: var(--font-primary);
+            background-color: var(--page-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
+        }
+
+        .theme-toggle-button {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--box-shadow);
+            z-index: 1001;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease, transform 0.2s ease-out;
+        }
+        .theme-toggle-button:hover { transform: scale(1.1); }
+        .theme-toggle-button .fa-sun { display: none; }
+        [data-theme="light"] .theme-toggle-button .fa-sun { display: inline-block; }
+        [data-theme="light"] .theme-toggle-button .fa-moon { display: none; }
+
+        .page-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 80px; 
+        }
+
+        .section {
+            width: 100%;
+            /* min-height: 100vh; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px; 
+            box-sizing: border-box;
+            position: relative;
+        }
+        .section-welcome {
+            justify-content: flex-start; 
+            padding-top: 15vh; 
+            padding-bottom: 15vh;
+        }
+        .section-roadmap {
+            justify-content: flex-start; 
+            padding-top: 10vh; 
+            padding-bottom: 10vh;
+            margin-bottom: 20px; 
+        }
+
+        .section-welcome h1.main-welcome-title {
+            font-size: 3em;
+            color: var(--accent-yellow);
+            margin-bottom: 30px; 
+            text-shadow: 2px 2px 8px var(--box-shadow);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out, color var(--theme-transition-duration) ease, text-shadow var(--theme-transition-duration) ease;
+        }
+        
+        .card-slider-container {
+            position: relative;
+            border-radius: 20px; 
+            max-width: 2000px; 
+            width: 90%;
+            overflow: hidden; 
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            z-index: 10;
+            height: 380px; 
+            display: flex; 
+            align-items: center; 
+        }
+
+        .card-slider-wrapper {
+            display: flex;
+            align-items: center; 
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+
+        .welcome-card {
+            width: 70%; 
+            min-width: 70%; 
+            flex-shrink: 0; 
+            box-sizing: border-box;
+            padding: 30px 40px; 
+            margin: 0 10px; 
+            background-color: var(--box-bg);
+            border-radius: 20px;
+            box-shadow: 0 6px 20px var(--box-shadow);
+            display: flex; 
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.5; 
+            transform: scale(0.85); 
+            transition: opacity 0.5s ease, transform 0.5s ease, background-color var(--theme-transition-duration) ease, box-shadow var(--theme-transition-duration) ease;
+            height: 300px; 
+        }
+        .welcome-card.active-card {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 2; 
+            box-shadow: 0 10px 30px var(--box-shadow); 
+        }
+        
+        .welcome-card .welcome-text-area {
+            flex-basis: 55%;
+            text-align: left;
+            padding-right: 25px; 
+            overflow-y: auto; 
+            max-height: calc(100% - 20px); 
+        }
+        .welcome-card .core-values {
+            font-size: 1.1em; 
+            color: var(--text-secondary);
+            line-height: 1.6;
+            transition: color var(--theme-transition-duration) ease;
+        }
+        .welcome-card.card-1 .core-values::before { 
+            content: "STUDIO JBBJ에 오신 애니메이터 여러분, 환영합니다! 🚀\A\A이곳이 바로 그 '사우스 코리안 파크'가 만들어지는, 바로 그 곳입니다. 지금부터 여러분의 멋진 여정이 시작될 겁니다?ㅋㅋ";
+        }
+        .welcome-card.card-2 .core-values::before { content: "저희 스튜디오 장삐쭈는 많은 사랑을 받은 유튜브 채널 '장삐쭈'에서, 자체 IP '사우스 코리안 파크' 시작했습니다. STUDIO JBBJ가 꾸는 꿈이자, 여러분과 함께 만들어갈 빛나는 비전입니다!"; }
+        .welcome-card.card-3 .core-values::before { content: "'상호 존중(리스펙)'입니다! 우리는 언제나 활짝 열린 분위기에서 자유롭고 솔직학데데 소통하며, 모든 제작자의 빛나는 크리에이티브를 소중히 여깁니다. 동료가 작업에 쏟은 시간과 반짝이는 기술, 그리고 맡은 역할에 대한 깊은 존중은 우리 스튜디오의 가장 중요한 핵심 가치입니다.\A\A여기서는 당신의 목소리가 힘을 갖고, 당신의 재능이 마음껏 빛날 수 있습니다!"; }
+        .welcome-card.card-4 .core-values::before { content: "이제 여러분도 이 멋진 여정의 주인공입니다! 서로 존중하고 지지하는 문화 속에서 여러분의 잠재력을 마음껏 펼치고, 사코팍 만들들 생각을 하니 벌써부터 가슴이 뛰지 않나요?\A\A여러분의 빛나는 아이디어가 현실이 되는 곳, STUDIO JBBJ가 당신의 힘찬 첫걸음과 성장을 뜨겁게 응원합니다!"; }
+
+        .welcome-card .welcome-image-area {
+            flex-basis: 40%;
+            height: 220px; 
+            background-color: var(--icon-wrapper-bg);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.9em;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
+        }
+        .welcome-card.card-1 .welcome-image-area::before { content: "사진 영역"; }
+        .welcome-card:not(.card-1) .welcome-image-area {
+            display: none;
+        }
+        .welcome-card:not(.card-1) .welcome-text-area { 
+            flex-basis: 100%;
+            padding-right: 0;
+            text-align: center; 
+        }
+
+        .card-nav-buttons {
+            position: absolute;
+            bottom: 15px; 
+            right: 15px;
+            display: flex;
+            gap: 8px; 
+            z-index: 15; 
+        }
+        .card-nav-button {
+            background-color: rgba(0,0,0,0.4); 
+            color: var(--accent-yellow);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 50%;
+            width: 32px; 
+            height: 32px;
+            font-size: 0.8em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+        }
+        .card-nav-button:hover {
+            background-color: var(--accent-yellow);
+            color: var(--page-bg);
+            transform: scale(1.1);
+        }
+        .card-nav-button:disabled { 
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .section-roadmap .roadmap-title {
+            font-size: 2.8em;
+            color: var(--accent-yellow);
+            font-weight: bold;
+            margin-bottom: 50px; 
+            text-shadow: 1px 1px 6px var(--box-shadow);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out, color var(--theme-transition-duration) ease, text-shadow var(--theme-transition-duration) ease;
+        }
+        .roadmap-container-wrapper {
+            background-color: var(--box-bg);
+            padding: 40px 30px; 
+            border-radius: 20px;
+            box-shadow: 0 8px 25px var(--box-shadow);
+            width: 90%;
+            max-width: 1200px;
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out, background-color var(--theme-transition-duration) ease, box-shadow var(--theme-transition-duration) ease;
+            margin-bottom: 30px; 
+        }
+        .roadmap-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 35px;
+            padding: 10px 0;
+            width: 100%;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .roadmap-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 110px;
+            position: relative;
+            cursor: pointer; 
+        }
+        .roadmap-item .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background-color: var(--icon-wrapper-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            border: 3px solid var(--icon-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--theme-transition-duration) ease, border-color var(--theme-transition-duration) ease;
+            box-shadow: 0 5px 15px var(--box-shadow);
+        }
+        .roadmap-item:hover .icon-wrapper {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 12px 25px rgba(255, 215, 0, 0.35);
+        }
+        .roadmap-item i {
+            font-size: 2.5em;
+            color: var(--accent-yellow);
+            transition: color var(--theme-transition-duration) ease;
+        }
+        .roadmap-item .item-title {
+            font-size: calc(0.9em + 3px); 
+            color: var(--accent-yellow); 
+            font-weight: bold; 
+            transition: color var(--theme-transition-duration) ease, font-size var(--theme-transition-duration) ease;
+        }
+        
+        /* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+        /* 추가된 CSS: 로고 이미지 스타일 */
+        .roadmap-logo-img {
+            width: 75%; /* 아이콘 래퍼 안에 로고가 멋지게 보이도록 크기 조절 */
+            height: auto;
+            object-fit: contain;
+        }
+        /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+        .tooltip { 
+            position: absolute;
+            bottom: 115px; 
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--box-shadow);
+            width: 250px;
+            font-size: 0.8em;
+            line-height: 1.5;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
+            z-index: 20;
+            pointer-events: none;
+        }
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--tooltip-bg) transparent transparent transparent;
+            transition: border-color var(--theme-transition-duration) ease;
+        }
+        .roadmap-item:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        .roadmap-intro-text {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 800px;
+            padding: 0 10px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out, color var(--theme-transition-duration) ease;
+            text-align: center;
+        }
+
+        .next-step-button-wrapper {
+            perspective: 800px; 
+            position: relative; 
+            margin-top: 50px;
+        }
+        .next-step-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1A1A1A; 
+            background-color: var(--accent-yellow);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.05s linear, box-shadow 0.3s ease, background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 5px 15px var(--box-shadow);
+        }
+        [data-theme="light"] .next-step-button {
+            color: #FFFFFF; 
+        }
+        .next-step-button:hover {
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+        .next-step-button-wrapper .tooltip-next { 
+            position: absolute;
+            bottom: calc(100% + 10px); 
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 10px 15px; 
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--box-shadow);
+            width: auto; 
+            min-width: 280px; 
+            max-width: 320px; 
+            font-size: 0.85em;
+            line-height: 1.5;
+            text-align: center; 
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            z-index: 20;
+            pointer-events: none; 
+        }
+        .next-step-button-wrapper .tooltip-next::after {
+            content: "";
+            position: absolute;
+            top: 100%; 
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--tooltip-bg) transparent transparent transparent; 
+            transform: translateX(-50%) rotate(180deg); 
+        }
+        .next-step-button-wrapper:hover .tooltip-next { 
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-5px); 
+        }
+
+        .footer-logo {
+            margin-top: 60px; 
+            margin-bottom: 30px; 
+            text-align: center;
+        }
+        .footer-logo img {
+            width: 120px; 
+            height: auto;
+            opacity: 0.6; 
+            transition: opacity 0.3s ease;
+        }
+        .footer-logo img:hover {
+            opacity: 1;
+        }
+
+        body::-webkit-scrollbar { width: 8px; }
+        body::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+        body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; }
+
+        .initial-fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        .initial-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+/* 2단계: CSS 코드 (style 태그 맨 아래에 추가) */
+/* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--theme-toggle-bg);
+    border: none;
+    border-radius: 50%;
+    z-index: 1003; /* 최상단에 위치 */
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 12px;
+    box-shadow: 0 2px 10px var(--box-shadow);
+}
+.sidebar-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--theme-toggle-icon);
+    border-radius: 3px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.sidebar-open .sidebar-toggle span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.sidebar-open .sidebar-toggle span:nth-child(2) {
+    opacity: 0;
+}
+.sidebar-open .sidebar-toggle span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--box-bg);
+    z-index: 1002;
+    padding: 80px 20px 20px 20px;
+    box-sizing: border-box;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-right: 1px solid var(--section-divider-color);
+}
+.sidebar-open .sidebar {
+    transform: translateX(0);
+}
+.sidebar-title {
+    color: var(--text-primary);
+    font-size: 1.4em;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--section-divider-color);
+}
+.sidebar-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar-nav-list li {
+    margin-bottom: 5px;
+}
+.sidebar-nav-link {
+    display: block;
+    text-decoration: none;
+    color: var(--text-secondary);
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 1.05em;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+.sidebar-nav-link:hover {
+    background-color: var(--hashtag-bg);
+    color: var(--text-primary);
+}
+.sidebar-nav-link.active {
+    background-color: var(--accent-yellow);
+    color: var(--box-bg) !important;
+    font-weight: 700;
+}
+[data-theme="light"] .sidebar-nav-link.active {
+    color: #FFFFFF !important;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s, visibility 0.4s;
+}
+.sidebar-open .overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.page-wrapper {
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 100%; /* 너비를 100%로 설정해야 함 */
+}
+.sidebar-open .page-wrapper {
+    transform: translateX(280px);
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+/* CSS 코드 끝 */
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+    </style>
+</head>
+<body>
+    <!-- ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ -->
+<!-- 1단계: HTML 코드 (body 태그 바로 아래에 추가) -->
+<!-- ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ -->
+
+<!-- 햄버거 메뉴 버튼 -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="메뉴 열기">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<!-- 사이드바 내비게이션 -->
+<nav class="sidebar" id="sidebar">
+    <h3 class="sidebar-title">온보딩 메뉴</h3>
+    <ul class="sidebar-nav-list">
+        <li><a href="2_overview.html" class="sidebar-nav-link">🚀 스튜디오 둘러보기</a></li>
+        <li><a href="3_mento.html" class="sidebar-nav-link">🧑‍🏫 멘토 소개</a></li>
+        <li><a href="4_memberlist.html" class="sidebar-nav-link">🧑‍🤝‍🧑 팀원 소개</a></li>
+        <li><a href="5_process.html" class="sidebar-nav-link">⚙️ 제작 과정</a></li>
+        <li><a href="7_communication-page.html" class="sidebar-nav-link">📝 필수 정보</a></li>
+        <!-- 새로운 페이지 추가 시 여기에 li 항목을 추가하세요 -->
+    </ul>
+</nav>
+
+<!-- 반투명 오버레이 -->
+<div class="overlay" id="overlay"></div>
+
+<!-- 기존 페이지 콘텐츠를 감싸는 래퍼 -->
+<div class="page-wrapper" id="pageWrapper">
+
+    <!-- 
+      ********************************************************
+      *                                                      *
+      *     여기에 각 페이지의 기존 콘텐츠 전체가 들어갑니다     *
+      * (예: <div class="theme-toggle-button">...</div> 부터)  *
+      *                                                      *
+      ********************************************************
+    -->
+
+</div>
+
+<!-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ -->
+<!-- HTML 코드 끝 -->
+<!-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ -->
+    <div class="theme-toggle-button" id="themeToggleButton" title="테마 변경">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <div class="page-container">
+        <section class="section section-welcome">
+            <h1 class="main-welcome-title initial-fade-in" id="mainWelcomeTitle">STUDIO JBBJ (스장) 은 여러분을 환영합니다.</h1>
+            
+            <div class="card-slider-container initial-fade-in" id="welcomeCardSlider">
+                <div class="card-slider-wrapper" id="cardSliderWrapper">
+                    <div class="welcome-card card-1 active-card"> <div class="welcome-text-area">
+                            <p class="core-values"></p>
+                        </div>
+                        <div class="welcome-image-area"></div>
+                    </div>
+                    <div class="welcome-card card-2">
+                        <div class="welcome-text-area">
+                            <p class="core-values"></p>
+                        </div>
+                    </div>
+                    <div class="welcome-card card-3">
+                        <div class="welcome-text-area">
+                            <p class="core-values"></p>
+                        </div>
+                    </div>
+                    <div class="welcome-card card-4">
+                        <div class="welcome-text-area">
+                            <p class="core-values"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-nav-buttons">
+                    <button class="card-nav-button" id="prevCardButton" title="이전 카드"><i class="fas fa-chevron-left"></i></button>
+                    <button class="card-nav-button" id="nextCardButton" title="다음 카드"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-roadmap">
+            <h2 class="roadmap-title initial-fade-in" id="roadmapTitle">온보딩 로드맵</h2>
+            <div class="roadmap-container-wrapper initial-fade-in" id="roadmapContainerWrapper">
+                <div class="roadmap-container">
+                    <div class="roadmap-item" onclick="location.href='3_mento.html'"> 
+                        <div class="icon-wrapper"><i class="fas fa-user-tie"></i></div>
+                        <span class="item-title">멘토 소개</span>
+                        <div class="tooltip">온보딩 과정과 향후 3개월간의 과정에서 여러분의 적응과 교육을 도와줄 담당 멘토를 소개합니다!</div>
+                    </div>
+                    <div class="roadmap-item" onclick="location.href='4_memberlist.html'"> 
+                        <div class="icon-wrapper"><i class="fas fa-users"></i></div>
+                        <span class="item-title">팀원 소개</span>
+                        <div class="tooltip">앞으로 함께 할 멋진 팀원들을 소개합니다. 모두 개성있고 착한 사람들이니 잘 다가가 보도록 도와드려요.</div>
+                    </div>
+                    <div class="roadmap-item" onclick="location.href='5_process.html'"> 
+                        <div class="icon-wrapper"><i class="fas fa-film"></i></div>
+                        <span class="item-title">제작 과정</span>
+                        <div class="tooltip">현재 스튜디오 장삐쭈의 사코팍 제작 과정에 대하여 소개해 드립니다. 각 과정에서 일어나는 필수적인 항목을 체크하고 이해해나가다 보면 빠르게 적응할 수 있어요.</div>
+                    </div>
+                    <div class="roadmap-item" onclick="location.href='#info-page'"> 
+                        <!-- ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ -->
+                        <!-- 수정된 HTML: 아이콘을 로고 이미지로 교체 -->
+                        <div class="icon-wrapper">
+                            <img src="../images/JBBJ_LOGO_Y.png" alt="필수 정보 로고" class="roadmap-logo-img">
+                        </div>
+                        <!-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ -->
+                        <span class="item-title">필수 정보</span>
+                        <div class="tooltip">사내 출퇴근 및 여러분이 알아야하는 정보에 대해서-작성중-</div>
+                    </div>
+                </div>
+                <p class="roadmap-intro-text">
+                    Studio jbbj의 온보딩 로드맵에 오신 것을 환영합니다! 각 단계를 통해 여러분이 우리 스튜디오에 잘 적응하고, 필요한 지식과 정보를 얻어 가실 수 있도록 안내해 드릴게요. 궁금한 점이 있다면 언제든 멘토에게 문의해주세요. 함께 즐겁게 성장해나가요!
+                </p>
+            </div>
+            
+            <div class="next-step-button-wrapper">
+                <button class="next-step-button" id="nextStepButton" onclick="location.href='3_mento.html'">다음 단계로 진행하기</button>
+                <div class="tooltip-next">온보딩 과정과 3개월간의 적응과정에서 교육과 도움을 줄 멘토를 소개해드릴게요.</div>
+            </div>
+
+            <div class="footer-logo">
+                <img src="../images/JBBJ_LOGO_Y.png" alt="STUDIO JBBJ 로고">
+            </div>
+            
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 테마 토글 로직 (생략)// ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+// 3단계: JavaScript 코드 (DOMContentLoaded 이벤트 리스너 안에 추가)
+// ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const pageWrapper = document.getElementById('pageWrapper');
+
+function toggleSidebar() {
+    document.body.classList.toggle('sidebar-open');
+}
+
+if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', toggleSidebar);
+}
+if (overlay) {
+    overlay.addEventListener('click', toggleSidebar);
+}
+
+// 현재 페이지 링크 활성화 로직
+const currentPath = window.location.pathname;
+const navLinks = document.querySelectorAll('.sidebar-nav-link');
+navLinks.forEach(link => {
+    // link.getAttribute('href')가 currentPath로 끝나는지 확인하여 활성화
+    if (currentPath.endsWith(link.getAttribute('href'))) {
+        link.classList.add('active');
+    }
+});
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+// JavaScript 코드 끝
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+            const themeToggleButton = document.getElementById('themeToggleButton');
+            const currentTheme = localStorage.getItem('themePreference');
+            function applyTheme(theme) {
+                document.body.dataset.theme = theme;
+                if (theme === 'light') {
+                    themeToggleButton.querySelector('.fa-moon').style.display = 'none';
+                    themeToggleButton.querySelector('.fa-sun').style.display = 'inline-block';
+                } else {
+                    themeToggleButton.querySelector('.fa-sun').style.display = 'none';
+                    themeToggleButton.querySelector('.fa-moon').style.display = 'inline-block';
+                }
+            }
+            if (currentTheme) { applyTheme(currentTheme); } else { applyTheme('dark'); }
+            themeToggleButton.addEventListener('click', () => {
+                let newTheme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+                localStorage.setItem('themePreference', newTheme);
+            });
+
+            // 카드 슬라이더 로직 (생략)
+            const sliderContainer = document.getElementById('welcomeCardSlider');
+            const sliderWrapper = document.getElementById('cardSliderWrapper');
+            const prevCardButton = document.getElementById('prevCardButton');
+            const nextCardButton = document.getElementById('nextCardButton');
+            const cards = document.querySelectorAll('.welcome-card');
+            let currentCardIndex = 0;
+            const totalCards = cards.length;
+            let cardWidth = 0; 
+            let containerWidth = 0;
+            function calculateCardWidth() {
+                if (cards.length > 0) {
+                    const firstCard = cards[0];
+                    const cardStyle = window.getComputedStyle(firstCard);
+                    cardWidth = firstCard.offsetWidth + parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
+                }
+                containerWidth = sliderContainer.offsetWidth;
+            }
+            function updateSliderPosition() {
+                calculateCardWidth(); 
+                const offsetToCenterCurrentCard = (containerWidth - cards[currentCardIndex].offsetWidth) / 2;
+                const newX = offsetToCenterCurrentCard - (currentCardIndex * cardWidth);
+                sliderWrapper.style.transform = `translateX(${newX}px)`;
+                cards.forEach((card, index) => {
+                    if (index === currentCardIndex) { card.classList.add('active-card'); card.classList.remove('prev-card', 'next-card'); } 
+                    else { card.classList.remove('active-card');
+                        if (index === currentCardIndex - 1) { card.classList.add('prev-card'); card.classList.remove('next-card'); } 
+                        else if (index === currentCardIndex + 1) { card.classList.add('next-card'); card.classList.remove('prev-card'); } 
+                        else { card.classList.remove('prev-card', 'next-card'); }
+                    }
+                });
+                prevCardButton.disabled = currentCardIndex === 0;
+                nextCardButton.disabled = currentCardIndex === totalCards - 1;
+            }
+            window.addEventListener('resize', updateSliderPosition); 
+            prevCardButton.addEventListener('click', () => { if (currentCardIndex > 0) { currentCardIndex--; updateSliderPosition(); } });
+            nextCardButton.addEventListener('click', () => { if (currentCardIndex < totalCards - 1) { currentCardIndex++; updateSliderPosition(); } });
+            if (cards.length > 0) { cards[0].classList.add('active-card'); }
+            updateSliderPosition(); 
+
+
+            // 스크롤 애니메이션 로직 (생략)
+            const mainWelcomeTitle = document.getElementById('mainWelcomeTitle');
+            const welcomeCardSlider = document.getElementById('welcomeCardSlider'); 
+            const roadmapTitle = document.getElementById('roadmapTitle');
+            const roadmapContainerWrapper = document.getElementById('roadmapContainerWrapper');
+            const animatedElements = [
+                { el: mainWelcomeTitle, group: 'welcome' }, { el: welcomeCardSlider, group: 'welcome' }, 
+                { el: roadmapTitle, group: 'roadmap' }, { el: roadmapContainerWrapper, group: 'roadmap' }
+            ];
+            function handleScrollAnimation(elementData) {
+                const { el, group } = elementData; if (!el) return;
+                const elementRect = el.getBoundingClientRect(); const viewportHeight = window.innerHeight;
+                const pageScrollY = window.scrollY; const pageHeight = document.body.scrollHeight;
+                let fadeOutStartLine, fadeOutEndLine; const finalTransformY = -80;
+                if (group === 'welcome') { fadeOutStartLine = viewportHeight * 0.40; fadeOutEndLine = viewportHeight * -0.20; } 
+                else { fadeOutStartLine = viewportHeight * 0.30; fadeOutEndLine = viewportHeight * 0.0; }
+                let targetOpacity = 1; let targetTransformY = 0;
+                if (group === 'welcome' && pageScrollY < 10) { targetOpacity = 1; targetTransformY = 0; } 
+                else if (group === 'roadmap' && (pageScrollY + viewportHeight >= pageHeight - 10)) { targetOpacity = 1; targetTransformY = 0; }
+                else if (elementRect.top < fadeOutStartLine) {
+                    let progress = (fadeOutStartLine - elementRect.top) / (fadeOutStartLine - fadeOutEndLine);
+                    progress = Math.max(0, Math.min(1, progress)); 
+                    targetOpacity = 1 - Math.pow(progress, 1.5); targetTransformY = progress * finalTransformY;
+                } else { targetOpacity = 1; targetTransformY = 0; }
+                el.style.opacity = targetOpacity; el.style.transform = `translateY(${targetTransformY}px)`;
+            }
+            const initialFadeElements = document.querySelectorAll('.initial-fade-in');
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.05 };
+            const initialObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transition = 'opacity 0.9s ease-out, transform 0.9s ease-out'; 
+                        entry.target.classList.add('is-visible');
+                        const foundElementData = animatedElements.find(item => item.el === entry.target);
+                        if (foundElementData) { handleScrollAnimation(foundElementData); }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            initialFadeElements.forEach(element => { initialObserver.observe(element); });
+            window.addEventListener('scroll', () => {
+                animatedElements.forEach(elementData => {
+                    if (elementData.el && elementData.el.classList.contains('is-visible')) {
+                        handleScrollAnimation(elementData);
+                    }
+                });
+            });
+            function initialRender() { animatedElements.forEach(elementData => { if (elementData.el) { handleScrollAnimation(elementData); } }); }
+            initialRender();
+
+            // "다음 단계로 진행하기" 버튼 3D 인터랙션 로직 (생략)
+            const nextStepButton = document.getElementById('nextStepButton');
+            if (nextStepButton) {
+                const buttonWrapper = nextStepButton.parentElement; 
+                buttonWrapper.addEventListener('mousemove', (e) => { 
+                    const rect = nextStepButton.getBoundingClientRect();
+                    const mouseX_inButton = e.clientX - rect.left;
+                    const mouseY_inButton = e.clientY - rect.top;
+                    const rotateY = (mouseX_inButton / rect.width - 0.5) * 20; 
+                    const rotateX = (0.5 - mouseY_inButton / rect.height) * 20;
+                    nextStepButton.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px)`;
+                });
+                buttonWrapper.addEventListener('mouseleave', () => { 
+                    nextStepButton.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

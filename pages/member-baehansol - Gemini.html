@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팀원 소개: 배한솔 - Studio jbbj 온보딩</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 테마 색상 변수 정의 (이전 페이지와 동일) */
+        :root {
+            --page-bg: #1A1A1A;
+            --text-primary: #F0E68C;
+            --text-secondary: #cccccc;
+            --text-muted: #BDBDBD;
+            --accent-yellow: #FFD700;
+            --box-bg: #282828;
+            --box-shadow: rgba(0,0,0,0.3);
+            --scrollbar-track: #1A1A1A;
+            --scrollbar-thumb: #FFD700;
+            --theme-toggle-bg: #333;
+            --theme-toggle-icon: #FFD700;
+            --theme-transition-duration: 0.3s;
+            --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+            --glow-color: rgba(255, 215, 0, 0.7);
+            --hashtag-bg: #444;
+            --hashtag-text: var(--accent-yellow);
+            --section-divider-color: #444;
+            --button-secondary-bg: #555;
+            --button-secondary-text: #eee;
+        }
+
+        [data-theme="light"] {
+            --page-bg: #F8F9FA;
+            --text-primary: #212529;
+            --text-secondary: #555555;
+            --text-muted: #6c757d;
+            --accent-yellow: #EAA600;
+            --box-bg: #FFFFFF;
+            --box-shadow: rgba(0,0,0,0.1);
+            --scrollbar-track: #e9ecef;
+            --scrollbar-thumb: #EAA600;
+            --theme-toggle-bg: #e0e0e0;
+            --theme-toggle-icon: #EAA600;
+            --glow-color: rgba(234, 166, 0, 0.7);
+            --hashtag-bg: #e9ecef;
+            --hashtag-text: var(--accent-yellow);
+            --section-divider-color: #ddd;
+            --button-secondary-bg: #f0f0f0;
+            --button-secondary-text: #333;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-family: var(--font-primary);
+            background-color: var(--page-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
+        }
+
+        .theme-toggle-button {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--box-shadow);
+            z-index: 1001;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease, transform 0.2s ease-out;
+        }
+        .theme-toggle-button:hover { transform: scale(1.1); }
+        .theme-toggle-button .fa-sun { display: none; }
+        [data-theme="light"] .theme-toggle-button .fa-sun { display: inline-block; }
+        [data-theme="light"] .theme-toggle-button .fa-moon { display: none; }
+
+        .page-container {
+            width: 100%;
+            max-width: 1000px; /* 페이지 전체 최대 너비 */
+            margin: 0 auto; /* 페이지 중앙 정렬 */
+            padding: 60px 20px; 
+            box-sizing: border-box;
+        }
+
+        .member-profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .member-name {
+            font-size: 2.8em;
+            color: var(--accent-yellow);
+            font-weight: 700;
+            margin: 0 0 5px 0;
+        }
+        .member-role {
+            font-size: 1.3em;
+            color: var(--text-secondary);
+            margin: 0 0 8px 0;
+        }
+        .member-dob {
+            font-size: 1em;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .member-profile-body {
+            display: flex;
+            flex-direction: column; /* 모바일에서는 수직으로 쌓임 */
+            gap: 30px;
+        }
+        @media (min-width: 768px) { /* 데스크탑에서는 가로 배치 */
+            .member-profile-body {
+                flex-direction: row;
+                align-items: flex-start; /* 상단 정렬 */
+            }
+        }
+
+        .member-image-section {
+            flex-shrink: 0;
+            width: 100%; /* 모바일에서 전체 너비 */
+            max-width: 300px; /* 캐릭터 이미지 크기 증가에 따른 최대 너비 조정 */
+            margin: 0 auto 30px auto; /* 모바일에서 중앙 정렬 및 하단 마진 */
+        }
+        @media (min-width: 768px) {
+            .member-image-section {
+                width: 300px; /* 데스크탑 이미지 너비 고정 (기존 250px -> 300px) */
+                margin: 0 40px 0 0; /* 오른쪽 마진 */
+            }
+        }
+
+        .member-character-image-link { 
+            display: block; 
+            position: relative; 
+            width: 100%; 
+            height: 300px; 
+            margin-bottom: 10px;
+            overflow: hidden; 
+            border-radius: 15px; 
+            border: 4px solid var(--accent-yellow); 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        .member-character-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            object-fit: cover; 
+        }
+
+
+        .member-info-section {
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            gap: 30px; 
+        }
+
+        .info-card {
+            background-color: var(--box-bg);
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--box-shadow);
+            transition: background-color var(--theme-transition-duration) ease, box-shadow var(--theme-transition-duration) ease;
+        }
+        .info-card-title {
+            font-size: 1.4em;
+            color: var(--accent-yellow);
+            font-weight: 500;
+            margin: 0 0 15px 0;
+            border-bottom: 1px solid var(--section-divider-color);
+            padding-bottom: 10px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        .hashtags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px; /* 버튼과의 간격 */
+        }
+        .hashtag {
+            background-color: var(--hashtag-bg);
+            color: var(--hashtag-text);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
+        }
+        .gemini-button {
+            background-color: var(--button-secondary-bg);
+            color: var(--button-secondary-text);
+            border: 1px solid var(--accent-yellow);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .gemini-button:hover {
+            background-color: var(--accent-yellow);
+            color: var(--page-bg);
+        }
+        .gemini-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .generated-hashtags {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+        }
+        .generated-hashtags span {
+            display: inline-block;
+            background-color: var(--hashtag-bg);
+            color: var(--hashtag-text);
+            padding: 4px 8px;
+            border-radius: 15px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+         .generated-hashtags span:hover {
+            filter: brightness(1.2);
+        }
+
+
+        .introduction-text {
+            font-size: 1em;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            white-space: pre-wrap; 
+        }
+
+        /* MBTI 슬라이더 스타일 */
+        .mbti-slider-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .mbti-slider-wrapper {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+        }
+        .mbti-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        .mbti-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block; 
+            margin: 0 auto; 
+        }
+        .mbti-nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .mbti-nav-button {
+            background-color: transparent;
+            color: var(--accent-yellow);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 0.8em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .mbti-nav-button:hover {
+            background-color: var(--accent-yellow);
+            color: var(--box-bg);
+        }
+        .mbti-nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Gemini Q&A 섹션 스타일 */
+        .gemini-qa-input {
+            width: calc(100% - 24px); /* 버튼 제외 너비 */
+            padding: 10px 12px;
+            border: 1px solid var(--section-divider-color);
+            border-radius: 8px;
+            background-color: var(--page-bg);
+            color: var(--text-primary);
+            font-size: 0.95em;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .gemini-qa-response {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+        }
+        [data-theme="light"] .gemini-qa-input {
+            background-color: #fff;
+        }
+        [data-theme="light"] .gemini-qa-response {
+            background-color: #f9f9f9;
+        }
+        
+        .page-navigation {
+            margin-top: 60px; 
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: 100%;
+        }
+        .nav-button {
+            padding: 12px 25px;
+            font-size: 1em;
+            font-weight: 500;
+            color: var(--page-bg); 
+            background-color: var(--accent-yellow);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease, color var(--theme-transition-duration) ease;
+            text-decoration: none; 
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        body::-webkit-scrollbar { width: 8px; }
+        body::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+        body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; }
+
+        .initial-fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .initial-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle-button" id="themeToggleButton" title="테마 변경">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <div class="page-container">
+        <header class="member-profile-header initial-fade-in">
+            <h1 class="member-name">배한솔</h1>
+            <p class="member-role">아트디렉터 / 애니메이터</p>
+            <p class="member-dob">1995년 12월 25일</p>
+        </header>
+
+        <div class="member-profile-body">
+            <aside class="member-image-section initial-fade-in">
+                <div class="member-character-image-link">
+                    <img src="../images/CH/배한솔0.png" alt="배한솔 캐릭터 이미지" class="member-character-image"
+                         onerror="this.onerror=null; this.src='https://placehold.co/300x300/333/FFD700?text=배한솔';">
+                </div>
+            </aside>
+
+            <main class="member-info-section">
+                <section class="info-card initial-fade-in" style="animation-delay: 0.1s;">
+                    <h2 class="info-card-title">해시태그로 보는 배한솔</h2>
+                    <div class="hashtags" id="hashtagsContainer">
+                        <span class="hashtag">#MBTI는ENTP</span>
+                        <span class="hashtag">#맥주보단소주</span>
+                        <span class="hashtag">#야구광팬_특히LG트윈스</span>
+                        <span class="hashtag">#주말엔_한강에서_자전거타기</span>
+                        <span class="hashtag">#신입은_언제나_환영</span>
+                        <span class="hashtag">#질문은_참지않긔</span>
+                    </div>
+                    <button class="gemini-button" id="generateHashtagsButton" style="margin-top: 15px;">✨ 해시태그 더 보기</button>
+                    <div class="generated-hashtags" id="generatedHashtagsContainer"></div>
+                </section>
+
+                <section class="info-card initial-fade-in" style="animation-delay: 0.2s;">
+                    <h2 class="info-card-title">한솔님을 소개합니다!</h2>
+                    <p class="introduction-text" id="introductionText">안녕하세요! 스튜디오 장삐쭈의 아트디렉터 겸 애니메이터, 그리고 여러분의 온보딩 여정을 함께할 멘토 배한솔입니다.
+저는 주로 '사우스 코리안 파크'의 전체적인 비주얼 톤앤매너를 잡고, 캐릭터들이 살아 숨 쉬도록 움직임을 만드는 일을 하고 있어요.
+창의적인 아이디어가 넘치는 우리 스튜디오에서 신입 여러분들이 마음껏 역량을 펼치고 함께 성장할 수 있도록 돕는 것이 제 목표입니다.
+언제든 편하게 다가와 주세요! 커피 한잔하면서 이런저런 이야기 나누는 것도 대환영입니다. 😉</p>
+                </section>
+
+                <section class="info-card initial-fade-in" style="animation-delay: 0.3s;">
+                    <div class="info-card-title">
+                        <span>MBTI</span>
+                        <div class="mbti-nav-buttons">
+                            <button class="mbti-nav-button" id="prevMbtiButton" title="이전 MBTI"><i class="fas fa-chevron-left"></i></button>
+                            <button class="mbti-nav-button" id="nextMbtiButton" title="다음 MBTI"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="mbti-slider-container">
+                        <div class="mbti-slider-wrapper" id="mbtiSliderWrapper">
+                            <div class="mbti-slide">
+                                <img src="../images/CH/CH_MBTI/배한솔_MBTI.png" alt="배한솔 MBTI 이미지" class="mbti-image"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/400x200/282828/FFD700?text=MBTI+배한솔';">
+                            </div>
+                            <div class="mbti-slide">
+                                <img src="../images/CH/CH_MBTI/전체_MBTI1.png" alt="전체 MBTI 1 이미지" class="mbti-image"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/400x200/282828/FFD700?text=전체+MBTI+1';">
+                            </div>
+                            <div class="mbti-slide">
+                                <img src="../images/CH/CH_MBTI/전체_MBTI2.png" alt="전체 MBTI 2 이미지" class="mbti-image"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/400x200/282828/FFD700?text=전체+MBTI+2';">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="info-card initial-fade-in" style="animation-delay: 0.4s;">
+                    <h2 class="info-card-title">✨ 한솔님께 무엇이든 물어보세요! (AI 기반)</h2>
+                    <input type="text" id="geminiQaInput" class="gemini-qa-input" placeholder="예: 스튜디오에서 가장 좋아하는 간식은 뭐예요?">
+                    <button class="gemini-button" id="askGeminiButton">질문하기</button>
+                    <div class="gemini-qa-response" id="geminiQaResponse"></div>
+                </section>
+            </main>
+        </div>
+
+        <div class="page-navigation initial-fade-in" style="animation-delay: 0.5s;">
+            <a href="4_team.html" class="nav-button prev-button">이전 (팀원 목록)</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 테마 토글 로직 (생략)
+            const themeToggleButton = document.getElementById('themeToggleButton');
+            const currentTheme = localStorage.getItem('themePreference');
+            function applyTheme(theme) {
+                document.body.dataset.theme = theme;
+                if (theme === 'light') {
+                    themeToggleButton.querySelector('.fa-moon').style.display = 'none';
+                    themeToggleButton.querySelector('.fa-sun').style.display = 'inline-block';
+                } else {
+                    themeToggleButton.querySelector('.fa-sun').style.display = 'none';
+                    themeToggleButton.querySelector('.fa-moon').style.display = 'inline-block';
+                }
+            }
+            if (currentTheme) { applyTheme(currentTheme); } else { applyTheme('dark'); }
+            themeToggleButton.addEventListener('click', () => {
+                let newTheme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+                localStorage.setItem('themePreference', newTheme);
+            });
+
+            // 초기 등장 애니메이션 (생략)
+            const initialFadeElements = document.querySelectorAll('.initial-fade-in');
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+            const initialObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out ' + (entry.target.style.animationDelay || '0s');
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            initialFadeElements.forEach(element => { initialObserver.observe(element); });
+
+            // MBTI 슬라이더 로직 (생략)
+            const mbtiSliderWrapper = document.getElementById('mbtiSliderWrapper');
+            const prevMbtiButton = document.getElementById('prevMbtiButton');
+            const nextMbtiButton = document.getElementById('nextMbtiButton');
+            const mbtiSlides = document.querySelectorAll('.mbti-slide');
+            let currentMbtiIndex = 0;
+            const totalMbtiSlides = mbtiSlides.length;
+            function updateMbtiSliderPosition() {
+                mbtiSliderWrapper.style.transform = `translateX(-${currentMbtiIndex * 100}%)`;
+                prevMbtiButton.disabled = currentMbtiIndex === 0;
+                nextMbtiButton.disabled = currentMbtiIndex === totalMbtiSlides - 1;
+            }
+            if (prevMbtiButton && nextMbtiButton && mbtiSliderWrapper && mbtiSlides.length > 0) {
+                prevMbtiButton.addEventListener('click', () => { if (currentMbtiIndex > 0) { currentMbtiIndex--; updateMbtiSliderPosition(); } });
+                nextMbtiButton.addEventListener('click', () => { if (currentMbtiIndex < totalMbtiSlides - 1) { currentMbtiIndex++; updateMbtiSliderPosition(); } });
+                updateMbtiSliderPosition(); 
+            }
+
+            // Gemini API 기능
+            const generateHashtagsButton = document.getElementById('generateHashtagsButton');
+            const hashtagsContainer = document.getElementById('hashtagsContainer');
+            const generatedHashtagsContainer = document.getElementById('generatedHashtagsContainer');
+            const introductionTextElement = document.getElementById('introductionText');
+            const introductionText = introductionTextElement ? introductionTextElement.textContent : "";
+
+            const askGeminiButton = document.getElementById('askGeminiButton');
+            const geminiQaInput = document.getElementById('geminiQaInput');
+            const geminiQaResponse = document.getElementById('geminiQaResponse');
+
+            const memberName = "배한솔"; // 현재 페이지의 멤버 이름
+            const memberRole = "아트디렉터 / 애니메이터"; // 현재 페이지의 멤버 역할
+
+            async function callGeminiApi(prompt, systemInstruction) {
+                const apiKey = ""; // Canvas가 자동으로 제공
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const contents = [{ role: "user", parts: [{ text: prompt }] }];
+                if (systemInstruction) {
+                    contents.unshift({ role: "model", parts: [{ text: "Okay, I will follow these instructions." }]}); // 더미 모델 응답
+                    contents.unshift({ role: "user", parts: [{ text: systemInstruction }]});
+                }
+
+
+                const payload = { contents: contents };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error("API Error:", errorData);
+                        throw new Error(`API 요청 실패: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        return result.candidates[0].content.parts[0].text;
+                    } else {
+                        console.warn("API 응답 형식이 예상과 다릅니다:", result);
+                        if (result.promptFeedback && result.promptFeedback.blockReason) {
+                             return `죄송합니다. 요청하신 내용에 답변을 드릴 수 없습니다. (사유: ${result.promptFeedback.blockReason.reason})`;
+                        }
+                        return "죄송합니다, 답변을 가져올 수 없습니다.";
+                    }
+                } catch (error) {
+                    console.error("Gemini API 호출 중 오류:", error);
+                    return "오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+                }
+            }
+
+            if (generateHashtagsButton) {
+                generateHashtagsButton.addEventListener('click', async () => {
+                    generateHashtagsButton.disabled = true;
+                    generateHashtagsButton.textContent = "생성 중...";
+                    const prompt = `'${memberName}'님은 '${memberRole}'이며, 소개글은 다음과 같습니다: "${introductionText}". 이 정보를 바탕으로 이 분을 잘 나타내는 재미있고 창의적인 해시태그 3~5개를 '#해시태그 #또다른해시태그' 형식으로 제안해주세요. 각 해시태그는 띄어쓰기 없이 #으로 시작해야 합니다.`;
+                    const systemInstruction = "당신은 직장 동료를 위한 재미있는 해시태그를 만들어주는 AI입니다. 유머러스하고 긍정적인 분위기로 작성해주세요.";
+                    const generatedText = await callGeminiApi(prompt, systemInstruction);
+                    
+                    generatedHashtagsContainer.innerHTML = ''; // 이전 내용 초기화
+                    if (generatedText && !generatedText.startsWith("죄송합니다") && !generatedText.startsWith("오류가")) {
+                        const newHashtags = generatedText.split(' ').filter(tag => tag.startsWith('#') && tag.length > 1);
+                        newHashtags.forEach(tag => {
+                            const span = document.createElement('span');
+                            span.textContent = tag;
+                            span.title = "클릭하여 추가";
+                            span.onclick = () => {
+                                // 중복 확인
+                                let existingHashtags = Array.from(hashtagsContainer.querySelectorAll('.hashtag')).map(ht => ht.textContent);
+                                if (!existingHashtags.includes(tag)) {
+                                    const newTagSpan = document.createElement('span');
+                                    newTagSpan.classList.add('hashtag');
+                                    newTagSpan.textContent = tag;
+                                    hashtagsContainer.appendChild(newTagSpan);
+                                    // 생성된 목록에서는 제거 (선택적)
+                                    // span.remove(); 
+                                } else {
+                                    alert("이미 추가된 해시태그입니다.");
+                                }
+                            };
+                            generatedHashtagsContainer.appendChild(span);
+                        });
+                    } else {
+                        generatedHashtagsContainer.textContent = "해시태그 생성에 실패했어요. 😥";
+                    }
+                    generateHashtagsButton.disabled = false;
+                    generateHashtagsButton.textContent = "✨ 해시태그 더 보기";
+                });
+            }
+
+            if (askGeminiButton) {
+                askGeminiButton.addEventListener('click', async () => {
+                    const question = geminiQaInput.value.trim();
+                    if (question === '') {
+                        geminiQaResponse.textContent = "질문을 입력해주세요.";
+                        return;
+                    }
+                    askGeminiButton.disabled = true;
+                    askGeminiButton.textContent = "답변 생성 중...";
+                    geminiQaResponse.textContent = "AI가 열심히 답변을 준비하고 있어요... 🤔";
+
+                    const prompt = `당신은 Studio JBBJ의 ${memberRole}인 ${memberName}님에 대해 답변하는 AI 챗봇입니다. 다음은 ${memberName}님의 자기소개입니다: "${introductionText}". 사용자의 질문: "${question}" 이 질문에 대해 ${memberName}님의 입장에서, 또는 ${memberName}님을 잘 아는 동료의 입장에서 친절하고 유머러스하게 답변해주세요. 하지만 당신은 AI이므로, 답변 시작 시 "안녕하세요! 저는 ${memberName}님의 AI 비서입니다. 😄" 와 같이 AI임을 밝히고 답변해주세요. 회사 내부 정보나 민감한 개인 정보에 대한 질문은 적절히 회피하거나 일반적인 내용으로 답변해주세요.`;
+                    const answer = await callGeminiApi(prompt);
+                    geminiQaResponse.textContent = answer;
+                    
+                    askGeminiButton.disabled = false;
+                    askGeminiButton.textContent = "질문하기";
+                    geminiQaInput.value = ""; // 질문 입력창 비우기
+                });
+                 geminiQaInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        askGeminiButton.click();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

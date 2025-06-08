@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>온보딩 최종 점검 - Studio jbbj</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --page-bg: #1A1A1A; --text-primary: #F0E68C; --text-secondary: #cccccc; --text-muted: #BDBDBD;
+            --accent-yellow: #FFD700; --accent-green: #4CAF50; --accent-red: #F44336; --box-bg: #282828;
+            --box-shadow: rgba(0,0,0,0.3); --hashtag-bg: #444; --theme-toggle-bg: #333; --theme-toggle-icon: #FFD700;
+            --section-divider-color: #444; --glow-color-yellow: rgba(255, 215, 0, 0.7);
+            --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+        }
+        [data-theme="light"] {
+            --page-bg: #F8F9FA; --text-primary: #212529; --text-secondary: #555555; --text-muted: #6c757d;
+            --accent-yellow: #EAA600; --accent-green: #4CAF50; --accent-red: #D32F2F; --box-bg: #FFFFFF;
+            --box-shadow: rgba(0,0,0,0.1); --hashtag-bg: #e9ecef; --theme-toggle-bg: #e0e0e0; --theme-toggle-icon: #EAA600;
+            --section-divider-color: #ddd; --glow-color-yellow: rgba(234, 166, 0, 0.7);
+        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: var(--font-primary); background-color: var(--page-bg); color: var(--text-primary); overflow: hidden; }
+        
+        /* 공통 스타일: 사이드바, 테마 토글 등 */
+        .sidebar-toggle{position:fixed;top:20px;left:20px;width:50px;height:50px;background-color:var(--theme-toggle-bg);border:none;border-radius:50%;z-index:1003;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:12px;box-shadow:0 2px 10px var(--box-shadow)}.sidebar-toggle span{display:block;width:100%;height:3px;background-color:var(--theme-toggle-icon);border-radius:3px;transition:transform .3s ease,opacity .3s ease}.sidebar-open .sidebar-toggle span:nth-child(1){transform:translateY(8px) rotate(45deg)}.sidebar-open .sidebar-toggle span:nth-child(2){opacity:0}.sidebar-open .sidebar-toggle span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}.sidebar{position:fixed;top:0;left:0;width:280px;height:100vh;background-color:var(--box-bg);z-index:1002;padding:80px 20px 20px 20px;box-sizing:border-box;transform:translateX(-100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94);border-right:1px solid var(--section-divider-color)}.sidebar-open .sidebar{transform:translateX(0)}.sidebar-title{color:var(--text-primary);font-size:1.4em;font-weight:500;margin:0 0 20px 0;padding-bottom:15px;border-bottom:1px solid var(--section-divider-color)}.sidebar-nav-list{list-style:none;padding:0;margin:0}.sidebar-nav-list li{margin-bottom:5px}.sidebar-nav-link{display:block;text-decoration:none;color:var(--text-secondary);padding:12px 15px;border-radius:8px;font-size:1.05em;font-weight:500;transition:background-color .2s,color .2s}.sidebar-nav-link:hover{background-color:var(--hashtag-bg,#444);color:var(--text-primary)}.sidebar-nav-link.active{background-color:var(--accent-yellow);color:var(--box-bg) !important;font-weight:700}[data-theme=light] .sidebar-nav-link.active{color:#fff !important}.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:1001;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}.sidebar-open .overlay{opacity:1;visibility:visible}.page-wrapper{transition:transform .4s cubic-bezier(.25,.46,.45,.94);width:100%;height:100%;display:flex;justify-content:center;align-items:center;}.sidebar-open .page-wrapper{transform:translateX(280px)}
+        .theme-toggle-button { position: fixed; top: 25px; right: 25px; width: 50px; height: 50px; background-color: var(--theme-toggle-bg); color: var(--theme-toggle-icon); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5em; cursor: pointer; box-shadow: 0 2px 10px var(--box-shadow); z-index: 1001; }
+        .theme-toggle-button:hover { transform: scale(1.1); } .theme-toggle-button .fa-sun { display: none; } [data-theme="light"] .theme-toggle-button .fa-sun { display: inline-block; } [data-theme="light"] .theme-toggle-button .fa-moon { display: none; }
+        
+        .quiz-container { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; padding: 20px; box-sizing: border-box; }
+        .quiz-card { background-color: var(--box-bg); padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px var(--box-shadow); width: 100%; max-width: 600px; text-align: center; transition: opacity 0.5s, transform 0.5s; }
+        .quiz-card.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; }
+        
+        #introCard h1, #resultCard h1 { font-size: 2.2em; color: var(--accent-yellow); margin: 0 0 15px 0; }
+        #introCard p, #resultCard p { font-size: 1.1em; color: var(--text-secondary); line-height: 1.7; margin: 0 0 30px 0; }
+        .newbie-name { color: var(--accent-yellow); font-weight: bold; }
+        .start-btn, .final-btn { padding: 15px 30px; font-size: 1.2em; font-weight: bold; color: #1A1A1A; background-color: var(--accent-yellow); border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s, filter 0.2s; }
+        .start-btn:hover, .final-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        [data-theme="light"] .start-btn, [data-theme="light"] .final-btn { color: #FFFFFF; }
+
+        .progress-bar-container { width: 100%; background-color: #444; border-radius: 5px; margin-bottom: 30px; overflow: hidden; }
+        .progress-bar { width: 0%; height: 10px; background-color: var(--accent-yellow); border-radius: 5px; transition: width 0.5s ease-out; }
+        .question-title { font-size: 1.5em; margin: 0 0 30px 0; color: var(--text-primary); line-height: 1.5; }
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .option-btn { background-color: #3a3a3a; border: 2px solid #555; color: var(--text-secondary); padding: 15px; border-radius: 10px; font-size: 1em; text-align: left; cursor: pointer; transition: all 0.2s; }
+        [data-theme="light"] .option-btn { background-color: #f0f0f0; border-color: #ddd; }
+        .option-btn:not(.disabled):hover { border-color: var(--accent-yellow); background-color: #444; }
+        [data-theme="light"] .option-btn:not(.disabled):hover { background-color: #e9ecef; }
+        .option-btn.correct { background-color: var(--accent-green); border-color: var(--accent-green); color: #fff; font-weight: bold; animation: pop 0.3s ease-out; }
+        .option-btn.incorrect { background-color: var(--accent-red); border-color: var(--accent-red); color: #fff; animation: shake-horizontal 0.4s; }
+        .option-btn.disabled { cursor: not-allowed; opacity: 0.7; }
+
+        #resultCard { max-width: 900px; }
+        #resultCard .welcome-image { width: 100%; max-width: 800px; height: auto; margin-bottom: 20px; border-radius: 10px; }
+        
+        @keyframes shake-horizontal { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70% { transform: translateX(-5px); } 20%, 40%, 60%, 80% { transform: translateX(5px); } }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+    <nav class="sidebar" id="sidebar">
+        <h3 class="sidebar-title">온보딩 메뉴</h3>
+        <ul class="sidebar-nav-list">
+            <li><a href="2_overview.html" class="sidebar-nav-link">🚀 스튜디오 둘러보기</a></li>
+            <li><a href="3_mento.html" class="sidebar-nav-link">🧑‍🏫 멘토 소개</a></li>
+            <li><a href="4_memberlist.html" class="sidebar-nav-link">🧑‍🤝‍🧑 팀원 소개</a></li>
+            <li><a href="5_process.html" class="sidebar-nav-link">⚙️ 제작 과정</a></li>
+            <li><a href="7_final_quiz.html" class="sidebar-nav-link">📝 최종 점검</a></li>
+        </ul>
+    </nav>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="page-wrapper" id="pageWrapper">
+        <div class="theme-toggle-button" id="themeToggleButton" title="테마 변경"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></div>
+        
+        <div class="quiz-container">
+            <div class="quiz-card" id="introCard">
+                <h1>온보딩 최종 점검!</h1>
+                <p>지금까지의 여정을 모두 마친 <span class="newbie-name"></span>님!<br>이제 스튜디오 생활에 필요한 모든 준비가 끝났는지 함께 확인해 봐요.<br><span style="font-size: 0.8em; color: var(--text-muted);">(본 점검 결과는 연봉 협상에 일절 반영되지 않음을 알려드립니다.)</span></p>
+                <button class="start-btn" id="startQuizBtn">점검 시작</button>
+            </div>
+
+            <div class="quiz-card hidden" id="quizCard">
+                <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+                <h2 class="question-title" id="questionTitle"></h2>
+                <div class="options-grid" id="optionsGrid"></div>
+            </div>
+
+            <div class="quiz-card hidden" id="resultCard">
+                <h1>최종 점검 완료!</h1>
+                <img src="../images/welcome_image.png" alt="환영합니다!" class="welcome-image">
+                <p>모든 준비를 마친 <span class="newbie-name"></span>님, 진정한 팀의 일원이 되신 것을 진심으로 환영합니다!</p>
+                <a href="https://studio-jbbj.slack.com/" target="_blank" class="final-btn" style="margin-top: 30px;">팀원들에게 인사하러 가기</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 공통 기능
+            const sidebarToggle=document.getElementById("sidebarToggle"),sidebar=document.getElementById("sidebar"),overlay=document.getElementById("overlay");function toggleSidebar(){document.body.classList.toggle("sidebar-open")}sidebarToggle&&sidebarToggle.addEventListener("click",toggleSidebar),overlay&&overlay.addEventListener("click",toggleSidebar);const currentPath=window.location.pathname,navLinks=document.querySelectorAll(".sidebar-nav-link");navLinks.forEach(e=>{currentPath.endsWith(e.getAttribute("href"))&&e.classList.add("active")});const themeToggleButton=document.getElementById("themeToggleButton"),currentTheme=localStorage.getItem("themePreference");function applyTheme(e){document.body.dataset.theme=e,"light"===e?(themeToggleButton.querySelector(".fa-moon").style.display="none",themeToggleButton.querySelector(".fa-sun").style.display="inline-block"):(themeToggleButton.querySelector(".fa-sun").style.display="none",themeToggleButton.querySelector(".fa-moon").style.display="inline-block")}currentTheme?applyTheme(currentTheme):applyTheme("dark"),themeToggleButton.addEventListener("click",()=>{let e="dark"===document.body.dataset.theme?"light":"dark";applyTheme(e),localStorage.setItem("themePreference",e)});
+
+            const newbieName = localStorage.getItem('newbieName') || '신입사원';
+            document.querySelectorAll('.newbie-name').forEach(el => el.textContent = newbieName);
+
+            // 퀴즈 데이터
+            const quizData = [
+                { question: "Q1. 당신의 멘토, 배한솔님이 세상 심각한 표정으로 모니터를 보고 있습니다. 이때 당신이 취해야 할 가장 올바른 행동은?", options: ["궁금한 게 있지만, 방해하기 미안해서 조용히 내 자리로 돌아가서 아무것도 모르는 채로 그저 시간이 지나길 바란다.", "'도대체 왜 저러나' 생각하며 그 모습을 몰래 도촬한 후 블라인드에 올려서 뒷담화를 한다.", "바빠 보이지만 용기를 내서 \"한솔님! 궁금한 거 있어요!\"를 외치며 당당하고 씩씩하게 다가간다.", "같이 치어리더 영상을 감상하고 열띈 감상평을 나눈다."], answer: 2 },
+                { question: "Q2. 불타는 열정으로 밤 11시까지 야근한 당신! 이제 퇴근해야 하는데, 시간이 너무 늦었습니다. 이 때 할 행동으로 올바른 것은?", options: ["피곤하고 힘들게 야근했지만 아무도 알아주지 않을거라고 생각하며 절망감과 우울감에 젖어 혼자 집으로 터덜터덜 걸어간다.", "한솔님에게 보고하고, '카카오T' 앱을 킨 후,'비즈니스' 탭에서 법인카드로 택시를 호출한다.", "삐쭈님께 전화해서 태워달라고 부탁한다.", "경제는 순환이다. 삥을 뜯어서 택시비를 충당하고 택시타고 귀가한다."], answer: 1 },
+                { question: "Q3. 스튜디오에서 동료들을 부를 때, 가장 올바른 호칭은 무엇일까요?", options: ["친근한 게 최고다. 삐쭈님이라 할지라도 예외는 없다. \"어이, 장씨!\" 라고 부른다.", "친근하게 다가가기 위해 \"미스터 쭈\", \"미스 허\" 등등의 호칭을 붙여서 부른다.", "약해보이거나 나랑 비슷한 시기 입사한 직원에게는 반존대를 섞고, 좀 세 보이거나 입사한 지 오래된 사람에게는 깍듯이 \"형님\" 이라고 부른다.", "직급, 나이와 상관없이 모두에게 \"OOO님\" 이라고 부른다."], answer: 3 },
+                { question: "Q4. 슬랙(Slack)에서 동료들과 저녁 식사 메뉴를 정할 때 사용하는 채널의 이름은 무엇일까요?", options: ["#아무나-밥먹자", "#배고파요-밥주세요", "#식사를-합시다", "#오늘-뭐먹지"], answer: 2 },
+                { question: "Q5. 냉장고에서 발견한 내 이름이 적힌 딸기우유가 사라졌습니다. 어떻게 해야 할까요?", options: ["항상 배고픈 다은님을 의심한다", "삐쭈님에게 전화해서 따진다.", "왠지 모르겠지만 재영님이 확실하다. 재영님 자리에 있는 고가의 키보드를 훔친다.", "#탐정-갤러리 채널에 이 사실을 올려서 범인을 찾으려고 한다."], answer: 3 },
+                { question: "Q6. 다음 중, 우리 스튜디오가 추구하는 방향으로 옳은 것은?", options: ["삐쭈님 정계에 입문하게 한 다음 우리끼리 한 자리씩 챙기기.", "애니메이터들을 노예처럼 부려먹으며 삐쭈님의 주머니를 빵빵하게 만들기.", "성과를 가로채기 위한 끝없는 정치질과 줄타기.", "서로에 대한 리스펙을 바탕으로 모두가 즐겁게 애니메이션을 만들고 끝없이 성장을 추구하는 건강한 집단."], answer: 3 },
+                { question: "Q7. (가장 중요!) 스튜디오 생활 중 가장 우선시해야 할 '궁극의 자세'는 무엇일까요?", options: ["호랑이는 혼자 사냥한다. 어떤 일이든 혼자 해결하여 나의 뛰어난 능력을 증명하고 겁쟁이처럼 몰려다니는 사람을 비아냥대기", "최대한 질문을 아껴 멘토와 동료들의 시간을 뺏지 않는다.", "내 의견이 무조건 맞고, 다른 사람들은 다 바보다. 따라서 바보들의 의견따위 시간낭비이므로 무시한다.", "모르거나 막히는 것은 '죄'가 아니다. 즉시 공유하고 함께 해결한다."], answer: 3 },
+                { question: "Q8. 이 온보딩을 모두 마친 당신에게 가장 필요한 것은?", options: ["모든 내용을 완벽히 암기하려는 부담감.", "이제 모든 걸 다 안다는 근자감.", "\"이제 진짜 시작이구나!\" 하는 설렘과 업계 최고 수준의 팀원들을 믿고 나아갈 용기.", "이 페이지를 빨리 끄고 싶은 마음."], answer: 2 }
+            ];
+
+            const introCard = document.getElementById('introCard');
+            const quizCard = document.getElementById('quizCard');
+            const resultCard = document.getElementById('resultCard');
+            const startQuizBtn = document.getElementById('startQuizBtn');
+            const questionTitle = document.getElementById('questionTitle');
+            const optionsGrid = document.getElementById('optionsGrid');
+            const progressBar = document.getElementById('progressBar');
+            let currentQuestionIndex = 0;
+            let confettiInterval = null;
+            let isAnswered = false;
+
+            function showCard(card) {
+                [introCard, quizCard, resultCard].forEach(c => c.classList.add('hidden'));
+                card.classList.remove('hidden');
+            }
+
+            function loadQuestion() {
+                isAnswered = false;
+                const currentQuiz = quizData[currentQuestionIndex];
+                questionTitle.textContent = currentQuiz.question;
+                optionsGrid.innerHTML = '';
+                currentQuiz.options.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.classList.add('option-btn');
+                    button.textContent = `${index + 1}. ${option}`;
+                    button.addEventListener('click', () => selectAnswer(index));
+                    optionsGrid.appendChild(button);
+                });
+                progressBar.style.width = `${((currentQuestionIndex) / quizData.length) * 100}%`;
+            }
+
+            function selectAnswer(selectedIndex) {
+                if (isAnswered) return;
+                isAnswered = true;
+                
+                const buttons = optionsGrid.querySelectorAll('.option-btn');
+                buttons.forEach(btn => btn.classList.add('disabled'));
+                
+                const correctIndex = quizData[currentQuestionIndex].answer;
+                if (selectedIndex === correctIndex) {
+                    buttons[selectedIndex].classList.add('correct');
+                } else {
+                    buttons[selectedIndex].classList.add('incorrect');
+                    buttons[correctIndex].classList.add('correct');
+                }
+
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < quizData.length) {
+                        progressBar.style.width = `${((currentQuestionIndex) / quizData.length) * 100}%`;
+                        loadQuestion();
+                    } else {
+                        showResult();
+                    }
+                }, 1500);
+            }
+
+            function triggerConfetti() {
+                // 더 화려한 폭죽 효과를 위해 여러 방향에서 동시에 발사
+                var end = Date.now() + (0.5 * 1000); // 0.5초간 실행
+                var colors = ['#FFD700', '#F0E68C', '#ffffff'];
+
+                (function frame() {
+                    // 왼쪽
+                    confetti({ particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+                    // 오른쪽
+                    confetti({ particleCount: 2, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+                    // 상단 중앙
+                    confetti({ particleCount: 2, angle: 90, spread: 80, origin: { y: 0, x: 0.5 }, colors: colors });
+                     // 하단 중앙
+                    confetti({ particleCount: 2, angle: 270, spread: 80, origin: { y: 1, x: 0.5 }, colors: colors });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+            }
+
+            function showResult() {
+                progressBar.style.width = '100%';
+                showCard(resultCard);
+                // 첫 빵빠레
+                confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
+                // 2.5초마다 계속 터지는 효과
+                if (confettiInterval) clearInterval(confettiInterval);
+                confettiInterval = setInterval(triggerConfetti, 2500);
+            }
+
+            startQuizBtn.addEventListener('click', () => {
+                showCard(quizCard);
+                loadQuestion();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>필수 정보 - Studio jbbj 온보딩</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 테마 색상 변수 정의 */
+        :root {
+            --page-bg: #1A1A1A;
+            --text-primary: #F0E68C;
+            --text-secondary: #cccccc;
+            --text-muted: #BDBDBD;
+            --accent-yellow: #FFD700;
+            --box-bg: #282828;
+            --box-shadow: rgba(0,0,0,0.3);
+            --scrollbar-track: #1A1A1A;
+            --scrollbar-thumb: #FFD700;
+            --theme-toggle-bg: #333;
+            --theme-toggle-icon: #FFD700;
+            --theme-transition-duration: 0.3s;
+            --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+            --section-divider-color: #444;
+            --highlight-box-bg: rgba(255, 215, 0, 0.1);
+            --highlight-box-border: var(--accent-yellow);
+            --toc-bg: #2c2c2c;
+            --toc-link-color: #a0a0a0;
+            --toc-link-active-color: #FFFFFF;
+            --toc-link-active-bg: var(--accent-yellow);
+        }
+
+        [data-theme="light"] {
+            --page-bg: #F8F9FA;
+            --text-primary: #212529;
+            --text-secondary: #555555;
+            --text-muted: #6c757d;
+            --accent-yellow: #EAA600;
+            --box-bg: #FFFFFF;
+            --box-shadow: rgba(0,0,0,0.1);
+            --scrollbar-track: #e9ecef;
+            --scrollbar-thumb: #EAA600;
+            --theme-toggle-bg: #e0e0e0;
+            --theme-toggle-icon: #EAA600;
+            --section-divider-color: #ddd;
+            --highlight-box-bg: rgba(234, 166, 0, 0.08);
+            --highlight-box-border: var(--accent-yellow);
+            --toc-bg: #ffffff;
+            --toc-link-color: #555;
+            --toc-link-active-color: #FFFFFF;
+            --toc-link-active-bg: var(--accent-yellow);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-family: var(--font-primary);
+            background-color: var(--page-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
+        }
+
+        .theme-toggle-button {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--box-shadow);
+            z-index: 1001;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease, transform 0.2s ease-out;
+        }
+        .theme-toggle-button:hover { transform: scale(1.1); }
+        .theme-toggle-button .fa-sun { display: none; }
+        [data-theme="light"] .theme-toggle-button .fa-sun { display: inline-block; }
+        [data-theme="light"] .theme-toggle-button .fa-moon { display: none; }
+
+        /* 목차 내비게이션 스타일 수정 */
+        .toc-nav {
+            position: fixed;
+            top: 20vh; /* 상단에서 20% 위치로 이동 */
+            left: 20px; /* 왼쪽으로 이동 */
+            /* transform: translateY(-50%); 수직 중앙 정렬 제거 */
+            background-color: var(--toc-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--box-shadow);
+            z-index: 1000;
+            opacity: 0; /* 초기 숨김 */
+            animation: fadeInAppear 1s ease-out 0.5s forwards;
+            display: none; /* 기본 숨김 */
+        }
+        @media (min-width: 1200px) { /* 넓은 화면에서만 보이도록 */
+             .toc-nav {
+                display: block;
+            }
+        }
+        .toc-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .toc-nav li {
+            margin-bottom: 10px;
+        }
+        .toc-nav li:last-child {
+            margin-bottom: 0;
+        }
+        .toc-nav a {
+            text-decoration: none;
+            color: var(--toc-link-color);
+            font-weight: 500;
+            font-size: 0.9em;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: block;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .toc-nav a:hover {
+            color: var(--text-primary);
+        }
+        .toc-nav a.active {
+            background-color: var(--toc-link-active-bg);
+            color: #000000;
+            font-weight: 700;
+        }
+
+
+        .page-container {
+            width: 100%;
+            max-width: 900px; /* 페이지 전체 최대 너비 */
+            margin: 0 auto; /* 페이지 중앙 정렬 */
+            padding: 60px 20px; 
+            box-sizing: border-box;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8em;
+            color: var(--accent-yellow);
+            margin-bottom: 50px;
+            font-weight: 700;
+            text-shadow: 1px 1px 6px var(--box-shadow);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* 모바일에서는 1열 */
+            gap: 30px;
+        }
+        
+        .info-card {
+            background-color: var(--box-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--box-shadow);
+            transition: background-color var(--theme-transition-duration) ease, box-shadow var(--theme-transition-duration) ease;
+        }
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.5em;
+            color: var(--accent-yellow);
+            font-weight: 500;
+            margin: 0 0 20px 0;
+            border-bottom: 1px solid var(--section-divider-color);
+            padding-bottom: 15px;
+        }
+        .info-card-header .fa-icon {
+            font-size: 1.2em;
+        }
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .info-card li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+            font-size: 1em;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        .info-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-yellow);
+            font-weight: bold;
+        }
+        .info-card p {
+            font-size: 1em;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        .info-card .sub-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--section-divider-color);
+        }
+        .sub-title {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+        strong {
+            color: var(--accent-yellow);
+            font-weight: 500;
+        }
+
+        .pin-reveal-container {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            background-color: #333;
+            padding: 8px 15px;
+            border-radius: 8px;
+            color: #333; 
+            font-size: 1.1em;
+            letter-spacing: 5px;
+            transition: color 0.2s;
+            user-select: none;
+        }
+        .pin-reveal-container:hover {
+            color: var(--accent-yellow);
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
+                                         rgba(255,255,255,0.8) 0%, 
+                                         rgba(255,255,255,0.4) 15px, 
+                                         rgba(0,0,0,0.5) 40px);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        [data-theme="light"] .pin-reveal-container {
+            background-color: #ddd;
+            color: #ddd;
+        }
+        [data-theme="light"] .pin-reveal-container:hover {
+            color: var(--accent-yellow);
+             background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
+                                         rgba(0,0,0,0.8) 0%, 
+                                         rgba(0,0,0,0.4) 15px, 
+                                         rgba(255,255,255,0.5) 40px);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+        }
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            padding: 0 10px;
+            text-align: center;
+        }
+        .slide img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block; 
+            margin: 0 auto 10px auto; 
+            box-shadow: 0 3px 10px var(--box-shadow);
+        }
+        .slide p {
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+        .slider-nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .slider-nav-button {
+            background-color: transparent;
+            color: var(--accent-yellow);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 0.9em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .slider-nav-button:hover {
+            background-color: var(--accent-yellow);
+            color: var(--box-bg);
+        }
+        .slider-nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .highlight-card {
+            background-color: var(--highlight-box-bg);
+            border: 1px solid var(--highlight-box-border);
+            padding: 30px;
+            border-radius: 15px;
+        }
+        
+        .page-navigation {
+            margin-top: 60px; 
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: 100%;
+        }
+        .nav-button {
+            padding: 12px 25px;
+            font-size: 1em;
+            font-weight: 500;
+            color: var(--page-bg); 
+            background-color: var(--accent-yellow);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease, color var(--theme-transition-duration) ease;
+            text-decoration: none; 
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        body::-webkit-scrollbar { width: 8px; }
+        body::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+        body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; }
+
+        .initial-fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .initial-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @keyframes fadeInAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+/* 2단계: CSS 코드 (style 태그 맨 아래에 추가) */
+/* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--theme-toggle-bg);
+    border: none;
+    border-radius: 50%;
+    z-index: 1003; /* 최상단에 위치 */
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 12px;
+    box-shadow: 0 2px 10px var(--box-shadow);
+}
+.sidebar-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--theme-toggle-icon);
+    border-radius: 3px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.sidebar-open .sidebar-toggle span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.sidebar-open .sidebar-toggle span:nth-child(2) {
+    opacity: 0;
+}
+.sidebar-open .sidebar-toggle span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--box-bg);
+    z-index: 1002;
+    padding: 80px 20px 20px 20px;
+    box-sizing: border-box;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-right: 1px solid var(--section-divider-color);
+}
+.sidebar-open .sidebar {
+    transform: translateX(0);
+}
+.sidebar-title {
+    color: var(--text-primary);
+    font-size: 1.4em;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--section-divider-color);
+}
+.sidebar-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar-nav-list li {
+    margin-bottom: 5px;
+}
+.sidebar-nav-link {
+    display: block;
+    text-decoration: none;
+    color: var(--text-secondary);
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 1.05em;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+.sidebar-nav-link:hover {
+    background-color: var(--hashtag-bg);
+    color: var(--text-primary);
+}
+.sidebar-nav-link.active {
+    background-color: var(--accent-yellow);
+    color: var(--box-bg) !important;
+    font-weight: 700;
+}
+[data-theme="light"] .sidebar-nav-link.active {
+    color: #FFFFFF !important;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s, visibility 0.4s;
+}
+.sidebar-open .overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.page-wrapper {
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 100%; /* 너비를 100%로 설정해야 함 */
+}
+.sidebar-open .page-wrapper {
+    transform: translateX(280px);
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+/* CSS 코드 끝 */
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+    </style>
+</head>
+<body>
+    <!-- ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ -->
+<!-- 1단계: HTML 코드 (body 태그 바로 아래에 추가) -->
+<!-- ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ -->
+
+<!-- 햄버거 메뉴 버튼 -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="메뉴 열기">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<!-- 사이드바 내비게이션 -->
+<nav class="sidebar" id="sidebar">
+    <h3 class="sidebar-title">온보딩 메뉴</h3>
+    <ul class="sidebar-nav-list">
+        <li><a href="2_overview.html" class="sidebar-nav-link">🚀 스튜디오 둘러보기</a></li>
+        <li><a href="3_mento.html" class="sidebar-nav-link">🧑‍🏫 멘토 소개</a></li>
+        <li><a href="4_memberlist.html" class="sidebar-nav-link">🧑‍🤝‍🧑 팀원 소개</a></li>
+        <li><a href="5_process.html" class="sidebar-nav-link">⚙️ 제작 과정</a></li>
+        <li><a href="7_communication-page.html" class="sidebar-nav-link">📝 필수 정보</a></li>
+        <!-- 새로운 페이지 추가 시 여기에 li 항목을 추가하세요 -->
+    </ul>
+</nav>
+
+<!-- 반투명 오버레이 -->
+<div class="overlay" id="overlay"></div>
+
+<!-- 기존 페이지 콘텐츠를 감싸는 래퍼 -->
+<div class="page-wrapper" id="pageWrapper">
+
+    <!-- 
+      ********************************************************
+      *                                                      *
+      *     여기에 각 페이지의 기존 콘텐츠 전체가 들어갑니다     *
+      * (예: <div class="theme-toggle-button">...</div> 부터)  *
+      *                                                      *
+      ********************************************************
+    -->
+
+</div>
+
+<!-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ -->
+<!-- HTML 코드 끝 -->
+<!-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ -->
+    <div class="theme-toggle-button" id="themeToggleButton" title="테마 변경">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <!-- 목차 내비게이션 -->
+    <nav class="toc-nav" id="tocNav">
+        <ul>
+            <!-- 순서 변경: 중요 공지 최상단 -->
+            <li><a href="#important-notice" class="toc-link">중요 공지</a></li>
+            <!-- 이름 변경: 근무 & 식사 -> 근무시간 -->
+            <li><a href="#work-hours" class="toc-link">근무시간</a></li>
+            <!-- 이름 변경: 야근 & 택시 -> 야근 -->
+            <li><a href="#overtime" class="toc-link">야근</a></li>
+            <li><a href="#vacation" class="toc-link">휴일 & 휴가</a></li>
+            <li><a href="#culture" class="toc-link">사내 문화</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-container">
+        <h1 class="section-title initial-fade-in">필수 정보</h1>
+        
+        <div class="info-grid">
+            <!-- 순서 변경: 중요 공지 섹션 최상단으로 이동 -->
+            <section class="highlight-card initial-fade-in" id="important-notice" style="animation-delay: 0.1s;">
+                <h2 class="info-card-header" style="color: var(--accent-yellow);"><i class="fas fa-star fa-icon"></i>가장 중요한 것!</h2>
+                <p>위에 안내된 모든 사항, 특히 <strong>근태와 관련된 변동 사항</strong>은 반드시 사수이자 멘토인 <strong> 저, 배한솔 에게 미리 공유</strong>해주세요!</p>
+                <p style="margin-top: 10px; color: var(--text-muted);">저는 언제나 여러분의 편의와 적응을 위해 귀 기울이고 배려할 준비가 되어 있답니다. 부담 없이 편하게 소통해주세요. 😊</p>
+            </section>
+
+            <section class="info-card initial-fade-in" id="work-hours" style="animation-delay: 0.2s;">
+                <h2 class="info-card-header"><i class="fas fa-clock fa-icon"></i>근무시간</h2>
+                <ul>
+                    <li> 일일근무 시간은 휴게시간(점심 또는 저녁1시간) 을 제외한 <strong>8시간</strong>입니다.</li>
+                    <li><strong>탄력근무제</strong>를 시행하고 있어, 출근 시간에 맞춰 퇴근 시간이 정해집니다. (예: 10시 출근 → 7시 퇴근, 11시 출근 → 8시 퇴근)</li>
+                    <li><strong>점심 또는 저녁 식대</strong>는 회사에서 지원합니다.</li>
+                    <li>저녁 식사 시간은 오후 5시부터 시작하며, 상황에 따라 유동적으로 변경될 수 있습니다.</li>
+                    <li>저녁 식사를 함께 하고 싶다면, Slack <strong>#식사를-합시다</strong> 채널에 올라오는 메시지에 참여 의사를 밝혀주세요! (메뉴는 자유!)</li>
+                </ul>
+            </section>
+
+            <section class="info-card initial-fade-in" id="overtime" style="animation-delay: 0.3s;">
+                <h2 class="info-card-header"><i class="fas fa-moon fa-icon"></i>야근</h2>
+                <ul>
+                    <li>정규근무 시간을 넘어 <strong>오후 10시</strong> 에서 <strong>익일 오전 6시 </strong>기준으로 <strong>연장근로</strong> 또는 <strong>잔업</strong>으로 구분합니다.</li>
+                    <li>연장근로시 사내 규정에 따라 다음 날 <strong>유연하게 출근</strong>하거나(예: 3시간 연장근무 → 3시간 늦게 출근) 또는 <strong>재택근무</strong>로 전환할 수 있습니다.</li>
+                    <li><strong>야근 택시</strong> 이용은 대중 교통 이용이 어려운 <strong>오후 11시부터</strong> 이용 가능합니다.</li>
+                    <li>야근 시, 직속 사수인 <strong>배한솔님에게 사전 공유 및 보고</strong>를 해야 합니다.</li>
+                </ul>
+                <div class="sub-section">
+                    <h3 class="sub-title"><i class="fas fa-taxi"></i>야근 시 퇴근 택시 이용 방법</h3>
+                    <p>카카오 T 앱을 통해 회사 법인카드로 택시를 호출할 수 있습니다.</p>
+                    <ol style="padding-left: 20px; margin-top: 10px;">
+                        <li><strong>최초 설정:</strong> 카카오 T 앱 실행 → 비즈니스 정보 → 비즈니스 등록 → '스튜디오장삐쭈' 기업명 입력</li>
+                        <li><strong>이용 시:</strong> 카카오 T 앱 실행 → 하단 '비즈니스' 탭 → 택시 탭 → 목적지 입력 후 결제</li>
+                        <li><strong>결제 비밀번호:</strong> <span class="pin-reveal-container" id="pinContainer">9710</span> (마우스를 올려 확인)</li>
+                    </ol>
+                </div>
+            </section>
+            
+            <section class="info-card initial-fade-in" id="vacation" style="animation-delay: 0.4s;">
+                 <h2 class="info-card-header"><i class="fas fa-umbrella-beach fa-icon"></i>휴일 근무 및 휴가</h2>
+                <ul>
+                    <!-- 내용 수정: 보고 의무 명시 -->
+                    <li>주말/공휴일 근무 시, <strong>대체 휴가</strong> 형태로 지급됩니다. (근무 필요 시, 사전에 꼭 사수에게 보고해주세요!)</li>
+                    <li>연차는 <strong>연 15일</strong> 부여되며, 1년 미만 신입사원은 1개월 만근 시 <strong>1일의 월차</strong>가 지급됩니다.</li>
+                </ul>
+                <div class="sub-section">
+                    <h3 class="sub-title"><i class="fab fa-slack"></i>휴가 신청 방법 (자체 개발 시스템)</h3>
+                    <div class="slider-container">
+                        <div class="slider-wrapper" id="leaveSliderWrapper">
+                            <div class="slide">
+                                <img src="../images/휴가사용-1.png" alt="휴가 신청 방법 1단계" onerror="this.onerror=null; this.src='https://placehold.co/400x250/282828/FFD700?text=이미지1';">
+                                <p><strong>1단계:</strong> Slack의 #휴가채널 입장</p>
+                            </div>
+                            <div class="slide">
+                                <img src="../images/휴가사용-2.png" alt="휴가 신청 방법 2단계" onerror="this.onerror=null; this.src='https://placehold.co/400x250/282828/FFD700?text=이미지2';">
+                                <p><strong>2단계:</strong> '연차 휴가 관리 워크플로'에서 원하는 동작 클릭</p>
+                            </div>
+                            <div class="slide">
+                                <img src="../images/휴가등록-1.png" alt="휴가 신청 방법 3단계" onerror="this.onerror=null; this.src='https://placehold.co/400x250/282828/FFD700?text=이미지3';">
+                                <p><strong>3단계:</strong> 휴가 종류, 기간, 사유 입력 후 등록</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-nav-buttons">
+                        <button class="slider-nav-button" id="prevLeaveButton" title="이전 단계"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-nav-button" id="nextLeaveButton" title="다음 단계"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="info-card initial-fade-in" id="culture" style="animation-delay: 0.5s;">
+                 <h2 class="info-card-header"><i class="fas fa-users fa-icon"></i>사내 문화</h2>
+                 <ul>
+                    <li>스튜디오에서는 <strong>상호 '님'자 호칭</strong>을 사용합니다.</li>
+                    <li>서로에 대한 <strong>존중</strong>은 가장 중요한 가치입니다. 함께 즐겁게 일하는 문화를 만들어가요!</li>
+                 </ul>
+            </section>
+        </div>
+
+        <div class="page-navigation initial-fade-in" style="animation-delay: 0.6s;">
+            <a href="5_process.html" class="nav-button prev-button">이전 (제작 과정)</a>
+            <a href="8_last-page.html" class="nav-button prev-button">다음 (최종 점검)</a>
+            </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+// 3단계: JavaScript 코드 (DOMContentLoaded 이벤트 리스너 안에 추가)
+// ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const pageWrapper = document.getElementById('pageWrapper');
+
+function toggleSidebar() {
+    document.body.classList.toggle('sidebar-open');
+}
+
+if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', toggleSidebar);
+}
+if (overlay) {
+    overlay.addEventListener('click', toggleSidebar);
+}
+
+// 현재 페이지 링크 활성화 로직
+const currentPath = window.location.pathname;
+const navLinks = document.querySelectorAll('.sidebar-nav-link');
+navLinks.forEach(link => {
+    // link.getAttribute('href')가 currentPath로 끝나는지 확인하여 활성화
+    if (currentPath.endsWith(link.getAttribute('href'))) {
+        link.classList.add('active');
+    }
+});
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+// JavaScript 코드 끝
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+            // 테마 토글 로직 (생략)
+            const themeToggleButton = document.getElementById('themeToggleButton');
+            const currentTheme = localStorage.getItem('themePreference');
+            function applyTheme(theme) {
+                document.body.dataset.theme = theme;
+                if (theme === 'light') {
+                    themeToggleButton.querySelector('.fa-moon').style.display = 'none';
+                    themeToggleButton.querySelector('.fa-sun').style.display = 'inline-block';
+                } else {
+                    themeToggleButton.querySelector('.fa-sun').style.display = 'none';
+                    themeToggleButton.querySelector('.fa-moon').style.display = 'inline-block';
+                }
+            }
+            if (currentTheme) { applyTheme(currentTheme); } else { applyTheme('dark'); }
+            themeToggleButton.addEventListener('click', () => {
+                let newTheme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+                localStorage.setItem('themePreference', newTheme);
+            });
+
+            // 초기 등장 애니메이션 (생략)
+            const initialFadeElements = document.querySelectorAll('.initial-fade-in');
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+            const initialObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out ' + (entry.target.style.animationDelay || '0s');
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            initialFadeElements.forEach(element => { initialObserver.observe(element); });
+
+            // PIN 번호 스포트라이트 효과 로직 (생략)
+            const pinContainer = document.getElementById('pinContainer');
+            if (pinContainer) {
+                pinContainer.addEventListener('mousemove', (e) => {
+                    const rect = pinContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    pinContainer.style.setProperty('--mouse-x', `${x}px`);
+                    pinContainer.style.setProperty('--mouse-y', `${y}px`);
+                });
+            }
+
+            // 휴가 신청 슬라이더 로직 (생략)
+            const leaveSliderWrapper = document.getElementById('leaveSliderWrapper');
+            const prevLeaveButton = document.getElementById('prevLeaveButton');
+            const nextLeaveButton = document.getElementById('nextLeaveButton');
+            const leaveSlides = document.querySelectorAll('#leaveSliderWrapper .slide');
+            let currentLeaveIndex = 0;
+            const totalLeaveSlides = leaveSlides.length;
+            function updateLeaveSliderPosition() {
+                leaveSliderWrapper.style.transform = `translateX(-${currentLeaveIndex * 100}%)`;
+                prevLeaveButton.disabled = currentLeaveIndex === 0;
+                nextLeaveButton.disabled = currentLeaveIndex === totalLeaveSlides - 1;
+            }
+            if (prevLeaveButton && nextLeaveButton && leaveSliderWrapper && leaveSlides.length > 0) {
+                prevLeaveButton.addEventListener('click', () => { if (currentLeaveIndex > 0) { currentLeaveIndex--; updateLeaveSliderPosition(); } });
+                nextLeaveButton.addEventListener('click', () => { if (currentLeaveIndex < totalLeaveSlides - 1) { currentLeaveIndex++; updateLeaveSliderPosition(); } });
+                updateLeaveSliderPosition();
+            }
+
+            // 목차 (TOC) 스크롤 스파이 로직 수정
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const sections = document.querySelectorAll('.info-card, .highlight-card');
+
+            const tocObserverOptions = {
+                root: null,
+                rootMargin: '0px 0px -60% 0px', // 뷰포트의 상단 40% 지점을 기준으로 감지
+                threshold: 0
+            };
+
+            let lastActiveLink = null; // 마지막으로 활성화된 링크 추적
+
+            const tocObserver = new IntersectionObserver((entries) => {
+                let topmostVisibleSectionId = null;
+
+                // 뷰포트 상단에 가장 가까운 intersecting 섹션을 찾음
+                let minTop = Infinity;
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.boundingClientRect.top < minTop) {
+                            minTop = entry.boundingClientRect.top;
+                            topmostVisibleSectionId = entry.target.getAttribute('id');
+                        }
+                    }
+                });
+                
+                // 만약 intersecting 섹션이 있다면, 해당 링크 활성화
+                if(topmostVisibleSectionId) {
+                    const activeLink = document.querySelector(`.toc-nav a[href="#${topmostVisibleSectionId}"]`);
+                    if (activeLink !== lastActiveLink) {
+                         // 모든 링크 비활성화
+                        tocLinks.forEach(link => link.classList.remove('active'));
+                        // 현재 링크만 활성화
+                        if(activeLink) {
+                           activeLink.classList.add('active');
+                        }
+                        lastActiveLink = activeLink;
+                    }
+                } else {
+                    // 페이지 맨 위에 있을 때 intersecting 섹션이 없을 수 있음. 이 경우 첫번째 링크 활성화
+                     if(window.scrollY < 200) { // 스크롤이 거의 최상단일 때
+                        tocLinks.forEach(link => link.classList.remove('active'));
+                        const firstLink = document.querySelector('.toc-nav li:first-child a');
+                        if (firstLink) {
+                            firstLink.classList.add('active');
+                        }
+                     }
+                }
+
+            }, tocObserverOptions);
+
+            sections.forEach(section => {
+                tocObserver.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제작 과정 - Studio jbbj 온보딩</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --page-bg: #1A1A1A; --text-primary: #F0E68C; --text-secondary: #cccccc; --text-muted: #BDBDBD;
+            --accent-yellow: #FFD700; --accent-green: #4CAF50; --box-bg: #282828; --box-shadow: rgba(0,0,0,0.3);
+            --tooltip-bg: #333333; --tooltip-text: #FFFFFF; --theme-toggle-bg: #333; --theme-toggle-icon: #FFD700;
+            --section-divider-color: #444; --glow-color-yellow: rgba(255, 215, 0, 0.7);
+            --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+        }
+        [data-theme="light"] {
+            --page-bg: #F8F9FA; --text-primary: #212529; --text-secondary: #555555; --text-muted: #6c757d;
+            --accent-yellow: #EAA600; --accent-green: #388E3C; --box-bg: #FFFFFF; --box-shadow: rgba(0,0,0,0.1);
+            --tooltip-bg: #f0f0f0; --tooltip-text: #333333; --theme-toggle-bg: #e0e0e0; --theme-toggle-icon: #EAA600;
+            --section-divider-color: #ddd; --glow-color-yellow: rgba(234, 166, 0, 0.7);
+        }
+
+        body, html { margin: 0; padding: 0; width: 100%; font-family: var(--font-primary); background-color: var(--page-bg); color: var(--text-primary); overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* 공통 스타일: 사이드바, 테마 토글 등 */
+        .sidebar-toggle{position:fixed;top:20px;left:20px;width:50px;height:50px;background-color:var(--theme-toggle-bg);border:none;border-radius:50%;z-index:1003;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:12px;box-shadow:0 2px 10px var(--box-shadow)}.sidebar-toggle span{display:block;width:100%;height:3px;background-color:var(--theme-toggle-icon);border-radius:3px;transition:transform .3s ease,opacity .3s ease}.sidebar-open .sidebar-toggle span:nth-child(1){transform:translateY(8px) rotate(45deg)}.sidebar-open .sidebar-toggle span:nth-child(2){opacity:0}.sidebar-open .sidebar-toggle span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}.sidebar{position:fixed;top:0;left:0;width:280px;height:100vh;background-color:var(--box-bg);z-index:1002;padding:80px 20px 20px 20px;box-sizing:border-box;transform:translateX(-100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94);border-right:1px solid var(--section-divider-color)}.sidebar-open .sidebar{transform:translateX(0)}.sidebar-title{color:var(--text-primary);font-size:1.4em;font-weight:500;margin:0 0 20px 0;padding-bottom:15px;border-bottom:1px solid var(--section-divider-color)}.sidebar-nav-list{list-style:none;padding:0;margin:0}.sidebar-nav-list li{margin-bottom:5px}.sidebar-nav-link{display:block;text-decoration:none;color:var(--text-secondary);padding:12px 15px;border-radius:8px;font-size:1.05em;font-weight:500;transition:background-color .2s,color .2s}.sidebar-nav-link:hover{background-color:var(--hashtag-bg,#444);color:var(--text-primary)}.sidebar-nav-link.active{background-color:var(--accent-yellow);color:var(--box-bg) !important;font-weight:700}[data-theme=light] .sidebar-nav-link.active{color:#fff !important}.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:1001;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}.sidebar-open .overlay{opacity:1;visibility:visible}.page-wrapper{transition:transform .4s cubic-bezier(.25,.46,.45,.94);width:100%}.sidebar-open .page-wrapper{transform:translateX(280px)}
+        .theme-toggle-button { position: fixed; top: 25px; right: 25px; width: 50px; height: 50px; background-color: var(--theme-toggle-bg); color: var(--theme-toggle-icon); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5em; cursor: pointer; box-shadow: 0 2px 10px var(--box-shadow); z-index: 1001; }
+        .theme-toggle-button:hover { transform: scale(1.1); } .theme-toggle-button .fa-sun { display: none; } [data-theme="light"] .theme-toggle-button .fa-sun { display: inline-block; } [data-theme="light"] .theme-toggle-button .fa-moon { display: none; }
+
+        .page-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; box-sizing: border-box; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-title { font-size: 2.8em; color: var(--accent-yellow); margin-bottom: 20px; font-weight: 700; text-shadow: 1px 1px 6px var(--box-shadow); }
+        .section-subtitle { font-size: 1em; color: var(--text-muted); max-width: 600px; line-height: 1.6; }
+        
+        .process-flow { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; max-width: 700px; }
+        .process-item { background-color: var(--box-bg); border-radius: 15px; padding: 25px 30px; width: 100%; box-sizing: border-box; box-shadow: 0 5px 15px var(--box-shadow); position: relative; transition: all 0.3s ease-out; }
+        .process-item:not(#uploadStep):hover { transform: translateY(-5px); box-shadow: 0 10px 25px var(--box-shadow); }
+        .process-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .process-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5em; flex-shrink: 0; }
+        .process-item.item-yellow .process-icon { background-color: var(--accent-yellow); color: #1A1A1A; }
+        .process-item.item-green .process-icon { background-color: var(--accent-green); color: #FFFFFF; }
+        .process-title-group { text-align: left; }
+        .process-step-title { font-size: 1.4em; font-weight: 700; color: var(--text-primary); margin: 0; }
+        .process-item .description { font-size: 1em; color: var(--text-secondary); text-align: left; line-height: 1.7; margin: 0; padding-left: 5px; }
+        .process-arrow { font-size: 2em; color: var(--text-muted); transform: scaleY(0); transform-origin: top; transition: transform 0.5s ease-out; }
+        .process-arrow.is-visible { transform: scaleY(1); }
+        .tooltip-trigger { color: var(--accent-yellow); font-weight: bold; border-bottom: 2px dotted var(--accent-yellow); cursor: help; position: relative; }
+        .tooltip-content { visibility: hidden; opacity: 0; position: absolute; bottom: 150%; left: 50%; transform: translateX(-50%); background-color: var(--tooltip-bg); color: var(--tooltip-text); padding: 10px 15px; border-radius: 8px; box-shadow: 0 5px 15px var(--box-shadow); width: 280px; font-size: 0.9em; line-height: 1.5; z-index: 10; transition: opacity 0.3s, visibility 0.3s; font-weight: normal; }
+        .tooltip-content::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 8px; border-style: solid; border-color: var(--tooltip-bg) transparent transparent transparent; }
+        .tooltip-trigger:hover .tooltip-content { visibility: visible; opacity: 1; }
+
+        .collapsible-header { display: flex; justify-content: space-between; align-items: center; }
+        .toggle-examples-btn { background: none; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 5px 10px; font-size: 0.8em; border-radius: 5px; cursor: pointer; }
+        
+        /* ▼▼▼▼▼ 수정: 아코디언 스타일 변경 ▼▼▼▼▼ */
+        .slider-section { display: none; margin-top: 20px; }
+        .slider-section.open { display: block; }
+        /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+        .slider-container { position: relative; overflow: hidden; border-radius: 10px; }
+        .slider-wrapper { display: flex; transition: transform 0.4s ease-in-out; }
+        .slide { min-width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
+        .slide img { max-width: 100%; height: auto; display: block; }
+        .slide p { font-size: 0.9em; color: var(--text-muted); margin: 10px 0 0 0; padding: 5px; background: rgba(0,0,0,0.3); border-radius: 5px;}
+        .slider-nav-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .slider-nav-button { background-color: transparent; color: var(--accent-yellow); border: 1px solid var(--accent-yellow); border-radius: 50%; width: 35px; height: 35px; font-size: 0.9em; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background-color 0.2s ease, color 0.2s ease; }
+        .slider-nav-button:hover { background-color: var(--accent-yellow); color: var(--box-bg); }
+        .slider-nav-button:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        #uploadStep { cursor: pointer; animation: pulse-upload-glow 3s infinite alternate; }
+        #uploadStep:hover { transform: translateY(-5px) scale(1.02); background-color: #3a3a3a; box-shadow: 0 10px 30px var(--box-shadow); }
+        [data-theme="light"] #uploadStep:hover { background-color: #f5f5f5; }
+        #uploadStep:hover .process-icon { transform: translateY(-3px) scale(1.1); }
+        @keyframes pulse-upload-glow {
+            from { box-shadow: 0 5px 15px var(--box-shadow); }
+            to { box-shadow: 0 5px 35px var(--glow-color-yellow); }
+        }
+
+        .page-navigation { margin-top: 60px; display: flex; gap: 20px; justify-content: center; width: 100%; }
+        .nav-button { padding: 12px 25px; font-size: 1em; font-weight: 500; color: var(--page-bg); background-color: var(--accent-yellow); border: none; border-radius: 8px; cursor: pointer; text-decoration: none; }
+        .nav-button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        body::-webkit-scrollbar { width: 8px; } body::-webkit-scrollbar-track { background: var(--page-bg); } body::-webkit-scrollbar-thumb { background-color: var(--accent-yellow); border-radius: 10px; }
+        .initial-fade-in { opacity: 0; transform: translateY(30px); } .initial-fade-in.is-visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+    <nav class="sidebar" id="sidebar">
+        <h3 class="sidebar-title">온보딩 메뉴</h3>
+        <ul class="sidebar-nav-list">
+            <li><a href="2_overview.html" class="sidebar-nav-link">🚀 스튜디오 둘러보기</a></li>
+            <li><a href="3_mento.html" class="sidebar-nav-link">🧑‍🏫 멘토 소개</a></li>
+            <li><a href="4_memberlist.html" class="sidebar-nav-link">🧑‍🤝‍🧑 팀원 소개</a></li>
+            <li><a href="5_process.html" class="sidebar-nav-link">⚙️ 제작 과정</a></li>
+            <li><a href="7_communication-page.html" class="sidebar-nav-link">📝 필수 정보</a></li>
+        </ul>
+    </nav>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="page-wrapper" id="pageWrapper">
+        <div class="theme-toggle-button" id="themeToggleButton" title="테마 변경"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></div>
+
+        <div class="page-container">
+            <div class="section-header initial-fade-in">
+                <h2 class="section-title">사우스 코리안 파크 제작 과정</h2>
+                <p class="section-subtitle">※ 본 프로세스는 단편 및 멤버십 영상 제작에 한하며, 추후 변경될 수 있으니 참고만 부탁드립니다.</p>
+            </div>
+            
+            <div class="process-flow" id="processFlow">
+                <div class="process-item item-yellow initial-fade-in" style="animation-delay: 0.1s;"><div class="process-header"><div class="process-icon"><i class="fas fa-plane-departure"></i></div><div class="process-title-group"><h3 class="process-step-title">1. 대본 원정</h3></div></div><p class="description">작가팀이 2박 3일간 타지역으로 <span class="tooltip-trigger">원정<span class="tooltip-content">회의실에서 따분하게 앉아서 집필 및 기획을 하는 게 아니라, 국내의 여러 장소를 선정해서 새로운 장소의 크리에이티브를 얻으며 작업합니다. 저희 스튜디오만의 특별한 점 중 하나입니다!</span></span>을 떠나 대본을 집필합니다.</p></div>
+                <div class="process-arrow initial-fade-in" style="animation-delay: 0.2s;"><i class="fas fa-arrow-down"></i></div>
+
+                <div class="process-item item-green initial-fade-in" style="animation-delay: 0.3s;">
+                    <div class="collapsible-header">
+                        <div class="process-header"><div class="process-icon"><i class="fas fa-boxes-stacked"></i></div><div class="process-title-group"><h3 class="process-step-title">1-2. 사전제작</h3></div></div>
+                        <button class="toggle-examples-btn" id="toggleSliderBtn">[ 예시 보기 ]</button>
+                    </div>
+                    <p class="description">제작자가 대본을 기반으로 캐릭터 디자인, 리깅, 배경, 스토리보드 등 사전에 필요한 것들을 준비합니다. 일정에 따라 생략되거나 다음 순서로 넘어갈 수도 있습니다.</p>
+                    <div class="slider-section" id="sliderSection">
+                        <div class="slider-container">
+                            <div class="slider-wrapper" id="preproSliderWrapper">
+                                <div class="slide"><img src="../images/캐디_1.png" alt="캐릭터 디자인 예시"><p>캐릭터 디자인</p></div>
+                                <div class="slide"><img src="../images/리깅_1.png" alt="리깅 예시"><p>리깅</p></div>
+                                <div class="slide"><img src="../images/배경_1.png" alt="배경 예시"><p>배경</p></div>
+                                <div class="slide"><img src="../images/릴_1.png" alt="릴 예시"><p>릴(스토리보드)</p></div>
+                            </div>
+                        </div>
+                        <div class="slider-nav-buttons">
+                            <button class="slider-nav-button" id="prevSlideBtn" title="이전"><i class="fas fa-chevron-left"></i></button>
+                            <button class="slider-nav-button" id="nextSlideBtn" title="다음"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="process-arrow initial-fade-in" style="animation-delay: 0.4s;"><i class="fas fa-arrow-down"></i></div>
+
+                <div class="process-item item-yellow initial-fade-in" style="animation-delay: 0.5s;"><div class="process-header"><div class="process-icon"><i class="fas fa-microphone-alt"></i></div><div class="process-title-group"><h3 class="process-step-title">2. 가녹음</h3></div></div><p class="description">삐쭈님이 대본을 토대로 <span class="tooltip-trigger">가녹음<span class="tooltip-content">슬랙의 #녹음-자료실 채널에 올라옵니다.</span></span>을 제작합니다. 캐릭터 더빙은 물론 지문 등의 내레이션, 전체적인 타이밍이 포함되어 있습니다.</p></div>
+                <div class="process-arrow initial-fade-in" style="animation-delay: 0.6s;"><i class="fas fa-arrow-down"></i></div>
+
+                <div class="process-item item-green initial-fade-in" style="animation-delay: 0.7s;"><div class="process-header"><div class="process-icon"><i class="fas fa-cogs"></i></div><div class="process-title-group"><h3 class="process-step-title">3. 릴(Reel)</h3></div></div><p class="description">제작자가 대본과 가녹음(+스토리보드)을 기반으로 릴 영상을 작업합니다.</p></div>
+                <div class="process-arrow initial-fade-in" style="animation-delay: 0.8s;"><i class="fas fa-arrow-down"></i></div>
+
+                <div class="process-item item-green initial-fade-in" style="animation-delay: 0.9s;"><div class="process-header"><div class="process-icon"><i class="fas fa-film"></i></div><div class="process-title-group"><h3 class="process-step-title">4. 가편본</h3></div></div><p class="description">제작자가 릴을 바탕으로 가편본을 작업합니다. 액팅, 편집, 보정 등 실질적인 제작을 수행하는 단계입니다.</p></div>
+                <div class="process-arrow initial-fade-in" style="animation-delay: 1.0s;"><i class="fas fa-arrow-down"></i></div>
+
+                <div class="process-item item-yellow initial-fade-in" style="animation-delay: 1.1s;"><div class="process-header"><div class="process-icon"><i class="fas fa-microphone-lines"></i></div><div class="process-title-group"><h3 class="process-step-title">5. 본녹음 및 최종 작업</h3></div></div><p class="description">삐쭈님이 피드백 반영된 최종 가편본에 녹음 수정, 사운드 작업, 편집 최종 작업을 진행합니다.</p></div>
+                <div class="process-arrow initial-fade-in" style="animation-delay: 1.2s;"><i class="fas fa-arrow-down"></i></div>
+
+                <div id="uploadStep" class="process-item item-green initial-fade-in" style="animation-delay: 1.3s;"><div class="process-header"><div class="process-icon"><i class="fas fa-upload"></i></div><div class="process-title-group"><h3 class="process-step-title">6. 최종 영상 완성 및 업로드</h3></div></div><p class="description">전 직원이 완성본 확인 및 옥에티 검토 후 썸네일과 함께 최종적으로 영상을 업로드합니다.</p></div>
+            </div>
+
+            <div class="page-navigation initial-fade-in" style="animation-delay: 1.4s;">
+                <a href="4_memberlist.html" class="nav-button prev-button">이전 (팀원 소개)</a>
+                <a href="7_communication-page.html" class="nav-button next-button">다음 (필수 정보)</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 공통 기능: 사이드바, 테마 토글
+            const sidebarToggle=document.getElementById("sidebarToggle"),sidebar=document.getElementById("sidebar"),overlay=document.getElementById("overlay");function toggleSidebar(){document.body.classList.toggle("sidebar-open")}sidebarToggle&&sidebarToggle.addEventListener("click",toggleSidebar),overlay&&overlay.addEventListener("click",toggleSidebar);const currentPath=window.location.pathname,navLinks=document.querySelectorAll(".sidebar-nav-link");navLinks.forEach(e=>{currentPath.endsWith(e.getAttribute("href"))&&e.classList.add("active")});const themeToggleButton=document.getElementById("themeToggleButton"),currentTheme=localStorage.getItem("themePreference");function applyTheme(e){document.body.dataset.theme=e,"light"===e?(themeToggleButton.querySelector(".fa-moon").style.display="none",themeToggleButton.querySelector(".fa-sun").style.display="inline-block"):(themeToggleButton.querySelector(".fa-sun").style.display="none",themeToggleButton.querySelector(".fa-moon").style.display="inline-block")}currentTheme?applyTheme(currentTheme):applyTheme("dark"),themeToggleButton.addEventListener("click",()=>{let e="dark"===document.body.dataset.theme?"light":"dark";applyTheme(e),localStorage.setItem("themePreference",e)});
+            
+            // 페이지 고유 기능
+            const initialFadeElements=document.querySelectorAll('.initial-fade-in');
+            const observerOptions={root:null,rootMargin:'0px',threshold:.1};
+            const initialObserver=new IntersectionObserver((entries,observer)=>{
+                entries.forEach(entry=>{
+                    if(entry.isIntersecting){
+                        if (entry.target.classList.contains('process-arrow')) { entry.target.classList.add('is-visible'); } 
+                        else { entry.target.style.transition=`opacity 0.8s ease-out, transform 0.8s ease-out ${entry.target.style.animationDelay||"0s"}`; entry.target.classList.add('is-visible'); }
+                        observer.unobserve(entry.target);
+                    }
+                })
+            },observerOptions);
+            initialFadeElements.forEach(e=>{initialObserver.observe(e)});
+
+            // 사전제작 슬라이더 로직
+            const sliderWrapper = document.getElementById('preproSliderWrapper');
+            const prevBtn = document.getElementById('prevSlideBtn');
+            const nextBtn = document.getElementById('nextSlideBtn');
+            let currentIndex = 0;
+            const slideCount = sliderWrapper ? sliderWrapper.children.length : 0;
+            function updateSlider() { if(sliderWrapper){sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`; prevBtn.disabled = currentIndex === 0; nextBtn.disabled = currentIndex === slideCount - 1;} }
+            if(prevBtn) { prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; updateSlider(); } }); }
+            if(nextBtn) { nextBtn.addEventListener('click', () => { if (currentIndex < slideCount - 1) { currentIndex++; updateSlider(); } }); }
+            updateSlider();
+
+            // 아코디언 (접기/펴기) 로직
+            const toggleSliderBtn = document.getElementById('toggleSliderBtn');
+            const sliderSection = document.getElementById('sliderSection');
+            if(toggleSliderBtn) {
+                toggleSliderBtn.addEventListener('click', () => {
+                    const isOpen = sliderSection.classList.toggle('open');
+                    toggleSliderBtn.textContent = isOpen ? '[ 접기 ]' : '[ 예시 보기 ]';
+                });
+            }
+
+            // 업로드 클릭 이벤트 (Confetti)
+            const uploadStep = document.getElementById('uploadStep');
+            if(uploadStep) { uploadStep.addEventListener('click', () => { confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } }); }); }
+        });
+    </script>
+</body>
+</html>

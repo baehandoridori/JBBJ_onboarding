@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>멘토 소개 - Studio jbbj 온보딩</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 테마 색상 변수 정의 */
+        :root {
+            --page-bg: #1A1A1A;
+            --text-primary: #F0E68C;
+            --text-secondary: #cccccc;
+            --text-muted: #BDBDBD;
+            --accent-yellow: #FFD700;
+            --box-bg: #282828;
+            --box-shadow: rgba(0,0,0,0.3);
+            --hashtag-bg: #444;
+            --theme-toggle-bg: #333;
+            --theme-toggle-icon: #FFD700;
+            --section-divider-color: #444;
+            --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+            --glow-color: rgba(255, 215, 0, 0.7);
+        }
+
+        [data-theme="light"] {
+            --page-bg: #F8F9FA;
+            --text-primary: #212529;
+            --text-secondary: #555555;
+            --text-muted: #6c757d;
+            --accent-yellow: #EAA600;
+            --box-bg: #FFFFFF;
+            --box-shadow: rgba(0,0,0,0.1);
+            --hashtag-bg: #e9ecef;
+            --theme-toggle-bg: #e0e0e0;
+            --theme-toggle-icon: #EAA600;
+            --section-divider-color: #ddd;
+            --glow-color: rgba(234, 166, 0, 0.7);
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%;
+            font-family: var(--font-primary);
+            background-color: var(--page-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+        /* 사이드바 메뉴 관련 스타일 */
+        /* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+        .sidebar-toggle {
+            position: fixed; top: 20px; left: 20px; width: 50px; height: 50px;
+            background-color: var(--theme-toggle-bg);
+            border: none; border-radius: 50%; z-index: 1003; cursor: pointer;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            gap: 5px; padding: 12px; box-shadow: 0 2px 10px var(--box-shadow);
+        }
+        .sidebar-toggle span {
+            display: block; width: 100%; height: 3px; background-color: var(--theme-toggle-icon);
+            border-radius: 3px; transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .sidebar-open .sidebar-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .sidebar-open .sidebar-toggle span:nth-child(2) { opacity: 0; }
+        .sidebar-open .sidebar-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        .sidebar {
+            position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+            background-color: var(--box-bg); z-index: 1002;
+            padding: 80px 20px 20px 20px; box-sizing: border-box;
+            transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-right: 1px solid var(--section-divider-color);
+        }
+        .sidebar-open .sidebar { transform: translateX(0); }
+        .sidebar-title { color: var(--text-primary); font-size: 1.4em; font-weight: 500; margin: 0 0 20px 0; padding-bottom: 15px; border-bottom: 1px solid var(--section-divider-color); }
+        .sidebar-nav-list { list-style: none; padding: 0; margin: 0; }
+        .sidebar-nav-list li { margin-bottom: 5px; }
+        .sidebar-nav-link { display: block; text-decoration: none; color: var(--text-secondary); padding: 12px 15px; border-radius: 8px; font-size: 1.05em; font-weight: 500; transition: background-color 0.2s, color 0.2s; }
+        .sidebar-nav-link:hover { background-color: var(--hashtag-bg); color: var(--text-primary); }
+        .sidebar-nav-link.active { background-color: var(--accent-yellow); color: var(--box-bg) !important; font-weight: 700; }
+        [data-theme="light"] .sidebar-nav-link.active { color: #FFFFFF !important; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1001; opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; }
+        .sidebar-open .overlay { opacity: 1; visibility: visible; }
+        .page-wrapper { transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); width: 100%; }
+        .sidebar-open .page-wrapper { transform: translateX(280px); }
+        /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+
+        .theme-toggle-button { position: fixed; top: 25px; right: 25px; width: 50px; height: 50px; background-color: var(--theme-toggle-bg); color: var(--theme-toggle-icon); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5em; cursor: pointer; box-shadow: 0 2px 10px var(--box-shadow); z-index: 1001; }
+        .theme-toggle-button:hover { transform: scale(1.1); } .theme-toggle-button .fa-sun { display: none; } [data-theme="light"] .theme-toggle-button .fa-sun { display: inline-block; } [data-theme="light"] .theme-toggle-button .fa-moon { display: none; }
+
+        .page-container { display: flex; flex-direction: column; align-items: center; padding: 80px 20px; perspective: 1000px; }
+        .page-title { font-size: 2.8em; color: var(--accent-yellow); font-weight: 700; margin-bottom: 50px; text-shadow: 1px 1px 6px var(--box-shadow); text-align: center; }
+
+        .mentor-profile-card { background-color: var(--box-bg); padding: 40px 50px; border-radius: 20px; box-shadow: 0 10px 30px var(--box-shadow); max-width: 900px; width: 95%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        @media (min-width: 768px) { .mentor-profile-card { flex-direction: row; text-align: left; align-items: flex-start; } }
+        
+        .mentor-image-column { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; margin-bottom: 30px; transform-style: preserve-3d; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        @media (min-width: 768px) { .mentor-image-column { margin-right: 40px; margin-bottom: 0; } }
+        .mentor-image-wrapper { width: 150px; height: 250px; margin-bottom: 15px; overflow: hidden; border-radius: 15px; border: 4px solid var(--accent-yellow); box-shadow: 0 3px 10px rgba(0,0,0,0.2); transition: box-shadow 0.3s ease, transform 0.3s ease; }
+        .mentor-image-wrapper:hover { transform: scale(1.03); box-shadow: 0 0 10px var(--glow-color), 0 0 18px var(--glow-color), 0 0 25px var(--glow-color), inset 0 0 8px rgba(255,255,255,0.15); }
+        .mentor-image { display: block; width: 100%; height: 200%; object-fit: cover; transition: transform 0.3s ease; }
+        .mentor-image-wrapper:hover .mentor-image { transform: scale(1.05); }
+        .mentor-bio-extras p { font-size: 0.9em; color: var(--text-muted); margin: 5px 0; line-height: 1.5; font-weight: 400; }
+
+        .mentor-details { display: flex; flex-direction: column; width: 100%; }
+        .mentor-name { font-size: 2.5em; color: var(--accent-yellow); margin: 0 0 5px 0; font-weight: 700; }
+        .mentor-role { font-size: 1.2em; color: var(--text-muted); margin-bottom: 25px; font-weight: 500; }
+        .mentor-message p { font-size: 1.05em; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; opacity: 0; }
+        .mentor-message p:last-child { margin-bottom: 0; }
+        
+        .newbie-name, strong { color: var(--accent-yellow); font-weight: bold; }
+        .small-comment { font-size: 0.9em; color: var(--text-muted); display: block; margin-top: 5px; }
+        .interactive-hesitation { display: inline-block; cursor: help; transition: transform 0.1s; }
+        .interactive-hesitation:hover { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-2px, 0, 0); } 40%, 60% { transform: translate3d(2px, 0, 0); } }
+        
+        @keyframes fadeUpIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .mentor-profile-card.is-visible .mentor-message p { animation-name: fadeUpIn; animation-duration: 0.7s; animation-timing-function: ease-out; animation-fill-mode: forwards; }
+        .mentor-profile-card.is-visible .mentor-message p:nth-child(1) { animation-delay: 0.3s; } .mentor-profile-card.is-visible .mentor-message p:nth-child(2) { animation-delay: 0.5s; } .mentor-profile-card.is-visible .mentor-message p:nth-child(3) { animation-delay: 0.7s; } .mentor-profile-card.is-visible .mentor-message p:nth-child(4) { animation-delay: 0.9s; } .mentor-profile-card.is-visible .mentor-message p:nth-child(5) { animation-delay: 1.1s; } .mentor-profile-card.is-visible .mentor-message p:nth-child(6) { animation-delay: 1.3s; } .mentor-profile-card.is-visible .mentor-message p:nth-child(7) { animation-delay: 1.5s; } .mentor-profile-card.is-visible .mentor-message p:nth-child(8) { animation-delay: 1.7s; }
+        
+        .page-navigation { margin-top: 50px; display: flex; gap: 20px; justify-content: center; width: 100%; }
+        .nav-button { padding: 12px 25px; font-size: 1em; font-weight: 500; color: var(--page-bg); background-color: var(--accent-yellow); border: none; border-radius: 8px; cursor: pointer; text-decoration: none; }
+        .nav-button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        body::-webkit-scrollbar { width: 8px; } body::-webkit-scrollbar-track { background: var(--page-bg); } body::-webkit-scrollbar-thumb { background-color: var(--accent-yellow); border-radius: 10px; }
+        .initial-fade-in { opacity: 0; transform: translateY(30px); } .initial-fade-in.is-visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+    <nav class="sidebar" id="sidebar">
+        <h3 class="sidebar-title">온보딩 메뉴</h3>
+        <ul class="sidebar-nav-list">
+            <li><a href="2_overview.html" class="sidebar-nav-link">🚀 스튜디오 둘러보기</a></li>
+            <li><a href="3_mento.html" class="sidebar-nav-link">🧑‍🏫 멘토 소개</a></li>
+            <li><a href="4_memberlist.html" class="sidebar-nav-link">🧑‍🤝‍🧑 팀원 소개</a></li>
+            <li><a href="5_process.html" class="sidebar-nav-link">⚙️ 제작 과정</a></li>
+            <li><a href="7_communication-page.html" class="sidebar-nav-link">📝 필수 정보</a></li>
+        </ul>
+    </nav>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="page-wrapper" id="pageWrapper">
+        <div class="theme-toggle-button" id="themeToggleButton" title="테마 변경"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></div>
+
+        <div class="page-container">
+            <h1 class="page-title initial-fade-in">멘토 소개</h1>
+
+            <div class="mentor-profile-card initial-fade-in">
+                <div class="mentor-image-column">
+                    <div class="mentor-image-wrapper"><img src="../images/CH/배한솔0.png" alt="멘토 배한솔 이미지" class="mentor-image"></div>
+                    <div class="mentor-bio-extras"><p class="bio-dob">1995년 12월 25일생</p><p class="bio-mbti">ENTP-A</p></div>
+                </div>
+                <div class="mentor-details">
+                    <h1 class="mentor-name">배 한솔</h1>
+                    <p class="mentor-role">아트디렉터 / 애니메이터</p>
+                    <div class="mentor-message">
+                        <p>안녕하세요, <span class="newbie-name" data-name-type="full"></span>님. <span class="newbie-name" data-name-type="first"></span>님을 맞이하게 되어 반갑고 기쁩니다.</p>
+                        <p>저는 앞으로 3개월간, 그리고 어쩌면 그 이후로 쭉 <span class="newbie-name" data-name-type="first"></span> 님의 스튜디오 적응을 돕는 멘토이자 사수 역할을 하게 될 배한솔입니다. 현재 아트디렉터와 애니메이터, 휴가 시스템이나 여러가지 잡다한 개발 등을 하고 있어요.</p>
+                        <p>아마, 모든 것이 조금은 막막하게 느껴질 수도 있을 겁니다. 긴장되실수도 있고, 아님 말고.<br>긴장된다면 그건 당연한 겁니다. 저 역시 그랬던 때가 있었고 그 때의 어려움을 누구보다 알기 때문에 <span class="newbie-name" data-name-type="first"></span>님의 그런 어려움을 잘 해소해 줄 수 있을 거라고 생각합니다.</p>
+                        
+                        <p>가끔 제가 세상 심각한 표정으로 모니터를 뚫어져라 쳐다보고 있을 때가 있을 겁니다. 중요한 버그가 나서, 혹은 머리아픈 작업과 사투를 벌이는 중일 수도 있지만, 유튜브에서 치어리더 영상을 보고 있을 확률이 더 높습니다. 그러니 제 표정이나 기운에 절대 주눅 들지 마세요. <strong><span class="newbie-name" data-name-type="first"></span>님을 돕는 것이 지금 저의 최우선 순위 업무입니다.</strong></p>
+                        <p><span class="interactive-hesitation">'이런 질문까지 해도 되나?'</span> 망설여 질 때, '한번 물어봤었던 건데 또 물어봐도 되나?' 라는 생각이 들 때에도, 그 어떤 사소한 궁금증과 고민도 모두 괜찮고 환영입니다. 실수할 수 있고 실수가 당연한 시기가 지금의 시기이니만큼, 자신감을 가지고 도전해 보셨으면 좋겠어요.<span class="small-comment">(누가 괴롭히는것도 말하세요.)</span></p>
+                        <p>저는 <span class="newbie-name" data-name-type="first"></span>님의 멘토이자 사수입니다. 때로는 앞에서, 때로는 뒤에서 <span class="newbie-name" data-name-type="first"></span>님의 편에서 물심양면으로, 제가 할 수 있는 최선와 제가 가용할 수 있는 최대치를 다해 도와드릴 테니, 가장 편하게, 의지할 수 있는 사람이라고 생각해 주세요.</p>
+                        <p>결국 우리 팀의 목표는 모두 같습니다. 업계 최고 수준의 팀원들과 함께 크리에이티브하고 재미있는 애니메이션을 즐겁게, 오래오래 만드는 겁니다. <span class="newbie-name" data-name-type="first"></span>님의 재능과 능력이 우리 팀에서 발휘될 수 있도록, <strong><span class="newbie-name" data-name-type="first"></span>님이 빛날 수 있도록 제가 가장 가까이서 든든한 서포터가 되어 드리겠습니다.</strong></p>
+                        <p>궁금한 점이 있다면 언제든, 무엇이든 주저 말고 슬랙 DM을 보내주시거나, 옆에 있는 저를 두드려 주세요.<span class="small-comment">(가끔 집중하면 주변의 소리를 못 듣는 때가 있습니다. 이건 귀찮아서 못 듣는 척 하는게 아닙니다. 가끔 빼고요.)</span></p>
+                        <p>다시 한번, 우리 팀에 들어오신 것을 환영합니다. 앞으로 함께 해나갈 순간을 기대하고 있겠습니다.<br> 저는 건강검진 끝나고 점심 이후쯤에 복귀하니 그 때 인사 나눠봅시다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-navigation initial-fade-in">
+                <a href="2_overview.html" class="nav-button prev-button">이전 (둘러보기)</a>
+                <a href="4_memberlist.html" class="nav-button next-button">다음 (팀원 소개)</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+            // 신입사원 이름 설정 (이곳만 수정하시면 됩니다)
+            // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+            const newbieFullName = "김어진"; // 예: "김어진"
+            
+            // 이름으로부터 성 제외
+            const newbieFirstName = newbieFullName.length > 1 ? newbieFullName.substring(1) : newbieFullName;
+            
+            // 페이지 내 모든 이름 영역을 찾아 값 삽입
+            document.querySelectorAll('.newbie-name').forEach(span => {
+                const nameType = span.getAttribute('data-name-type');
+                if (nameType === 'full') {
+                    span.textContent = newbieFullName;
+                } else if (nameType === 'first') {
+                    span.textContent = newbieFirstName;
+                }
+            });
+            
+            // 사이드바 메뉴, 테마 토글 등 공통 기능
+            const sidebarToggle=document.getElementById("sidebarToggle"),sidebar=document.getElementById("sidebar"),overlay=document.getElementById("overlay"),pageWrapper=document.getElementById("pageWrapper");function toggleSidebar(){document.body.classList.toggle("sidebar-open")}sidebarToggle&&sidebarToggle.addEventListener("click",toggleSidebar),overlay&&overlay.addEventListener("click",toggleSidebar);const currentPath=window.location.pathname,navLinks=document.querySelectorAll(".sidebar-nav-link");navLinks.forEach(e=>{currentPath.endsWith(e.getAttribute("href"))&&e.classList.add("active")});const themeToggleButton=document.getElementById("themeToggleButton"),currentTheme=localStorage.getItem("themePreference");function applyTheme(e){document.body.dataset.theme=e,"light"===e?(themeToggleButton.querySelector(".fa-moon").style.display="none",themeToggleButton.querySelector(".fa-sun").style.display="inline-block"):(themeToggleButton.querySelector(".fa-sun").style.display="none",themeToggleButton.querySelector(".fa-moon").style.display="inline-block")}currentTheme?applyTheme(currentTheme):applyTheme("dark"),themeToggleButton.addEventListener("click",()=>{let e="dark"===document.body.dataset.theme?"light":"dark";applyTheme(e),localStorage.setItem("themePreference",e)});
+            
+            // 페이지 고유 기능
+            const initialFadeElements=document.querySelectorAll('.initial-fade-in');const observerOptions={root:null,rootMargin:'0px',threshold:.1};const initialObserver=new IntersectionObserver((e,t)=>{e.forEach(e=>{e.isIntersecting&&(e.target.style.transition='opacity 0.8s ease-out, transform 0.8s ease-out',e.target.classList.add('is-visible'),t.unobserve(e.target))})},observerOptions);initialFadeElements.forEach(e=>{initialObserver.observe(e)});const tiltElement=document.querySelector('.mentor-image-column');tiltElement&&tiltElement.addEventListener('mousemove',e=>{const t=tiltElement.getBoundingClientRect(),o=e.clientX-t.left,n=e.clientY-t.top,s=t.width/2,i=t.height/2,a=(o-s)/s*10,l=-1*(n-i)/i*10;tiltElement.style.transform=`perspective(1000px) rotateY(${a}deg) rotateX(${l}deg)`}),tiltElement&&tiltElement.addEventListener('mouseleave',()=>{tiltElement.style.transform='perspective(1000px) rotateY(0deg) rotateX(0deg)'});
+        });
+    </script>
+</body>
+</html>

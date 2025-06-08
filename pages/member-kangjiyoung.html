@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팀원 소개: 강지융 - Studio jbbj 온보딩</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 테마 색상 변수 정의 (이전 페이지와 동일) */
+        :root {
+            --page-bg: #1A1A1A;
+            --text-primary: #F0E68C;
+            --text-secondary: #cccccc;
+            --text-muted: #BDBDBD;
+            --accent-yellow: #FFD700;
+            --box-bg: #282828;
+            --box-shadow: rgba(0,0,0,0.3);
+            --scrollbar-track: #1A1A1A;
+            --scrollbar-thumb: #FFD700;
+            --theme-toggle-bg: #333;
+            --theme-toggle-icon: #FFD700;
+            --theme-transition-duration: 0.3s;
+            --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+            --glow-color: rgba(255, 215, 0, 0.7);
+            --hashtag-bg: #444;
+            --hashtag-text: var(--accent-yellow);
+            --section-divider-color: #444;
+        }
+
+        [data-theme="light"] {
+            --page-bg: #F8F9FA;
+            --text-primary: #212529;
+            --text-secondary: #555555;
+            --text-muted: #6c757d;
+            --accent-yellow: #EAA600;
+            --box-bg: #FFFFFF;
+            --box-shadow: rgba(0,0,0,0.1);
+            --scrollbar-track: #e9ecef;
+            --scrollbar-thumb: #EAA600;
+            --theme-toggle-bg: #e0e0e0;
+            --theme-toggle-icon: #EAA600;
+            --glow-color: rgba(234, 166, 0, 0.7);
+            --hashtag-bg: #e9ecef;
+            --hashtag-text: var(--accent-yellow);
+            --section-divider-color: #ddd;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-family: var(--font-primary);
+            background-color: var(--page-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
+        }
+
+        .theme-toggle-button {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-icon);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--box-shadow);
+            z-index: 1001;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease, transform 0.2s ease-out;
+        }
+        .theme-toggle-button:hover { transform: scale(1.1); }
+        .theme-toggle-button .fa-sun { display: none; }
+        [data-theme="light"] .theme-toggle-button .fa-sun { display: inline-block; }
+        [data-theme="light"] .theme-toggle-button .fa-moon { display: none; }
+
+        .page-container {
+            width: 100%;
+            max-width: 1000px; /* 페이지 전체 최대 너비 */
+            margin: 0 auto; /* 페이지 중앙 정렬 */
+            padding: 60px 20px; 
+            box-sizing: border-box;
+        }
+
+        .member-profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .member-name {
+            font-size: 2.8em;
+            color: var(--accent-yellow);
+            font-weight: 700;
+            margin: 0 0 5px 0;
+        }
+        .member-role {
+            font-size: 1.3em;
+            color: var(--text-secondary);
+            margin: 0 0 8px 0;
+        }
+        .member-dob {
+            font-size: 1em;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .member-profile-body {
+            display: flex;
+            flex-direction: column; /* 모바일에서는 수직으로 쌓임 */
+            gap: 30px;
+        }
+        @media (min-width: 768px) { /* 데스크탑에서는 가로 배치 */
+            .member-profile-body {
+                flex-direction: row;
+                align-items: flex-start; /* 상단 정렬 */
+            }
+        }
+
+        .member-image-section {
+            flex-shrink: 0;
+            width: 100%; /* 모바일에서 전체 너비 */
+            max-width: 300px; /* 캐릭터 이미지 크기 증가에 따른 최대 너비 조정 */
+            margin: 0 auto 30px auto; /* 모바일에서 중앙 정렬 및 하단 마진 */
+        }
+        @media (min-width: 768px) {
+            .member-image-section {
+                width: 300px; /* 데스크탑 이미지 너비 고정 (기존 250px -> 300px) */
+                margin: 0 40px 0 0; /* 오른쪽 마진 */
+            }
+        }
+
+        .member-character-image-link { 
+            display: block; 
+            position: relative; 
+            width: 100%; 
+            /* padding-top: 100%; 1:1 비율 유지 대신 고정 높이 사용 */
+            height: 630px; /* 캐릭터 이미지 컨테이너 높이 2배 (150px * 2 가정, 또는 원하는 크기) */
+            margin-bottom: 10px;
+            overflow: hidden; 
+            border-radius: 15px; 
+            border: 4px solid var(--accent-yellow); 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        .member-character-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            object-fit: cover; 
+        }
+
+
+        .member-info-section {
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            gap: 30px; 
+        }
+
+        .info-card {
+            background-color: var(--box-bg);
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--box-shadow);
+            transition: background-color var(--theme-transition-duration) ease, box-shadow var(--theme-transition-duration) ease;
+        }
+        .info-card-title {
+            font-size: 1.4em;
+            color: var(--accent-yellow);
+            font-weight: 500;
+            margin: 0 0 15px 0;
+            border-bottom: 1px solid var(--section-divider-color);
+            padding-bottom: 10px;
+            display: flex; /* MBTI 섹션 버튼 정렬용 */
+            justify-content: space-between; /* MBTI 섹션 버튼 정렬용 */
+            align-items: center; /* MBTI 섹션 버튼 정렬용 */
+        }
+
+        .hashtags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .hashtag {
+            background-color: var(--hashtag-bg);
+            color: var(--hashtag-text);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background-color var(--theme-transition-duration) ease, color var(--theme-transition-duration) ease;
+        }
+
+        .introduction-text {
+            font-size: 1em;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            white-space: pre-wrap; 
+        }
+
+        /* MBTI 슬라이더 스타일 */
+        .mbti-slider-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .mbti-slider-wrapper {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+        }
+        .mbti-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        .mbti-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block; 
+            margin: 0 auto; 
+        }
+        .mbti-nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .mbti-nav-button {
+            background-color: transparent;
+            color: var(--accent-yellow);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 0.8em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .mbti-nav-button:hover {
+            background-color: var(--accent-yellow);
+            color: var(--box-bg);
+        }
+        .mbti-nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .page-navigation {
+            margin-top: 60px; 
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: 100%;
+        }
+        .nav-button {
+            padding: 12px 25px;
+            font-size: 1em;
+            font-weight: 500;
+            color: var(--page-bg); 
+            background-color: var(--accent-yellow);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease, color var(--theme-transition-duration) ease;
+            text-decoration: none; 
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        body::-webkit-scrollbar { width: 8px; }
+        body::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+        body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; }
+
+        .initial-fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .initial-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+                /* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+        /* 추가된 부분: 팀원 목록 목차 스타일 */
+        /* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+        .member-toc-nav {
+            background-color: var(--box-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px var(--box-shadow);
+        }
+        .member-toc-title {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin: 0 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--section-divider-color);
+            text-align: center;
+        }
+        .member-toc-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            /* 자동으로 칸 수를 조절하는 반응형 그리드 */
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+        }
+        .member-toc-nav a {
+            display: block;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9em;
+            padding: 8px;
+            text-align: center;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+            white-space: nowrap;
+        }
+        .member-toc-nav a:hover {
+            color: var(--text-primary);
+            background-color: var(--hashtag-bg);
+        }
+        .member-toc-nav a.active {
+            color: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            font-weight: bold;
+        }
+        /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+    </style>
+</head>
+<body>
+    <div class="theme-toggle-button" id="themeToggleButton" title="테마 변경">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <div class="page-container">
+        <header class="member-profile-header initial-fade-in">
+            <h1 class="member-name">강지융</h1>
+            <p class="member-role">작가<br>노인</p>
+        </header>
+
+        <div class="member-profile-body">
+            <aside class="member-image-section initial-fade-in">
+                <!-- 캐릭터 이미지 -->
+                <div class="member-character-image-link">
+                    <img src="../images/CH/강지융0.png" alt="강지융 캐릭터 이미지" class="member-character-image"
+                         onerror="this.onerror=null; this.src='https://placehold.co/300x300/333/FFD700?text=강지융';">
+                </div>
+                                <!-- ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ -->
+                <!-- 추가된 부분: 전체 팀원 목록 -->
+                <!-- ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ -->
+                <nav class="member-toc-nav">
+                    <h3 class="member-toc-title">전체 팀원 목록</h3>
+                    <ul>
+                        <li><a href="member-jangbbojju.html">장삐쭈</a></li>
+                        <li><a href="member-heohyewon.html">허혜원</a></li>
+                        <li><a href="member-jijeongmin.html">지정민</a></li>
+                        <li><a href="member-jangjaeyeong.html">장재영</a></li>
+                        <li><a href="member-kangjiyoung.html" class="active">강지융</a></li>
+                        <li><a href="member-anryucheon.html">안류천</a></li>
+                        <li><a href="member-yunsungwon.html">윤성원</a></li>
+                        <li><a href="member-wondongwoo.html">원동우</a></li>
+                        <li><a href="member-parkjungin.html">박정인</a></li>
+                        <li><a href="member-kangseonyoung.html">강선영</a></li>
+                        <li><a href="member-leemyeonghoon.html">이명훈</a></li>
+                        <li><a href="member-leehyemin.html">이혜민</a></li>
+                        <li><a href="member-baehansol.html">배한솔</a></li>
+                        <li><a href="member-idaeun.html">이다은</a></li>
+                        <li><a href="member-junhyerim.html">전혜림</a></li>
+                        <!-- 김어진님 페이지가 있다면 아래 주석을 푸세요 -->
+                        <!-- <li><a href="member-kimeojin.html">김어진</a></li> -->
+                    </ul>
+                </nav>
+                <!-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ -->
+            </aside>
+
+            <main class="member-info-section">
+                <!-- 해시태그 섹션 -->
+                <section class="info-card initial-fade-in" style="animation-delay: 0.1s;">
+                    <h2 class="info-card-title">해시태그로 보는 강지융</h2>
+                    <div class="hashtags">
+                        <!-- 해시태그는 여기서 수정하세요. -->
+                        <span class="hashtag">#스윗서티</span>
+                        <span class="hashtag">#인스타중독</span>
+                    </div>
+                </section>
+
+                <!-- 소개 섹션 -->
+                <section class="info-card initial-fade-in" style="animation-delay: 0.2s;">
+                    <h2 class="info-card-title">지융님을 소개합니다!</h2>
+                    <p class="introduction-text">인스타 팔로우 안 하면 장재영</p>
+                </section>
+
+                <!-- MBTI 섹션 -->
+                <section class="info-card initial-fade-in" style="animation-delay: 0.3s;">
+                    <div class="info-card-title">
+                        <span>MBTI</span>
+                        <div class="mbti-nav-buttons">
+                            <button class="mbti-nav-button" id="prevMbtiButton" title="이전 MBTI"><i class="fas fa-chevron-left"></i></button>
+                            <button class="mbti-nav-button" id="nextMbtiButton" title="다음 MBTI"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="mbti-slider-container">
+                        <div class="mbti-slider-wrapper" id="mbtiSliderWrapper">
+                            <div class="mbti-slide">
+                                <img src="../images/CH/CH_MBTI/강지융_MBTI.png" alt="강지융 MBTI 이미지" class="mbti-image"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/400x200/282828/FFD700?text=MBTI+강지융';">
+                            </div>
+                            <div class="mbti-slide">
+                                <img src="../images/CH/CH_MBTI/전체_MBTI1.png" alt="전체 MBTI 1 이미지" class="mbti-image"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/400x200/282828/FFD700?text=전체+MBTI+1';">
+                            </div>
+                            <div class="mbti-slide">
+                                <img src="../images/CH/CH_MBTI/전체_MBTI2.png" alt="전체 MBTI 2 이미지" class="mbti-image"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/400x200/282828/FFD700?text=전체+MBTI+2';">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <div class="page-navigation initial-fade-in" style="animation-delay: 0.4s;">
+            <a href="4_memberlist.html" class="nav-button prev-button">이전 (팀원 목록)</a>
+            <!-- <a href="다음페이지.html" class="nav-button next-button">다음</a> -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 테마 토글 로직 (생략)
+            const themeToggleButton = document.getElementById('themeToggleButton');
+            const currentTheme = localStorage.getItem('themePreference');
+            function applyTheme(theme) {
+                document.body.dataset.theme = theme;
+                if (theme === 'light') {
+                    themeToggleButton.querySelector('.fa-moon').style.display = 'none';
+                    themeToggleButton.querySelector('.fa-sun').style.display = 'inline-block';
+                } else {
+                    themeToggleButton.querySelector('.fa-sun').style.display = 'none';
+                    themeToggleButton.querySelector('.fa-moon').style.display = 'inline-block';
+                }
+            }
+            if (currentTheme) { applyTheme(currentTheme); } else { applyTheme('dark'); }
+            themeToggleButton.addEventListener('click', () => {
+                let newTheme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+                localStorage.setItem('themePreference', newTheme);
+            });
+
+            // 초기 등장 애니메이션 (Intersection Observer)
+            const initialFadeElements = document.querySelectorAll('.initial-fade-in');
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+            const initialObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out ' + (entry.target.style.animationDelay || '0s');
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            initialFadeElements.forEach(element => { initialObserver.observe(element); });
+
+            // MBTI 슬라이더 로직
+            const mbtiSliderWrapper = document.getElementById('mbtiSliderWrapper');
+            const prevMbtiButton = document.getElementById('prevMbtiButton');
+            const nextMbtiButton = document.getElementById('nextMbtiButton');
+            const mbtiSlides = document.querySelectorAll('.mbti-slide');
+            let currentMbtiIndex = 0;
+            const totalMbtiSlides = mbtiSlides.length;
+
+            function updateMbtiSliderPosition() {
+                mbtiSliderWrapper.style.transform = `translateX(-${currentMbtiIndex * 100}%)`;
+                prevMbtiButton.disabled = currentMbtiIndex === 0;
+                nextMbtiButton.disabled = currentMbtiIndex === totalMbtiSlides - 1;
+            }
+
+            if (prevMbtiButton && nextMbtiButton && mbtiSliderWrapper && mbtiSlides.length > 0) {
+                prevMbtiButton.addEventListener('click', () => {
+                    if (currentMbtiIndex > 0) {
+                        currentMbtiIndex--;
+                        updateMbtiSliderPosition();
+                    }
+                });
+
+                nextMbtiButton.addEventListener('click', () => {
+                    if (currentMbtiIndex < totalMbtiSlides - 1) {
+                        currentMbtiIndex++;
+                        updateMbtiSliderPosition();
+                    }
+                });
+                updateMbtiSliderPosition(); // 초기 버튼 상태 설정
+            }
+        });
+    </script>
+</body>
+</html>
