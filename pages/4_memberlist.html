@@ -546,10 +546,14 @@
         .common-space-seat {
             transform-style: preserve-3d;
             cursor: pointer;
-            transition: transform 0.1s linear, box-shadow 0.2s ease;
+            transition: transform 0.15s ease-out, box-shadow 0.3s ease, filter 0.3s ease;
         }
         .common-space-seat:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(255, 215, 0, 0.4),
+                0 0 40px rgba(255, 215, 0, 0.2);
+            filter: brightness(1.1);
         }
 
         /* 툴팁 말풍선 스타일 */
@@ -1388,14 +1392,14 @@ navLinks.forEach(link => {
                     const centerX = rect.left + rect.width / 2;
                     const centerY = rect.top + rect.height / 2;
 
-                    const rotateY = ((e.clientX - centerX) / rect.width) * 15;
-                    const rotateX = -((e.clientY - centerY) / rect.height) * 15;
+                    const rotateY = ((e.clientX - centerX) / rect.width) * 25;
+                    const rotateX = -((e.clientY - centerY) / rect.height) * 25;
 
-                    seat.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+                    seat.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(15px) scale(1.08)`;
                 });
 
                 seat.addEventListener('mouseleave', () => {
-                    seat.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
+                    seat.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)';
 
                     // 마우스가 구역을 벗어나면 툴팁 숨기기
                     if (activeElement === seat) {
