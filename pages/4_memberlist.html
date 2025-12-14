@@ -1396,6 +1396,22 @@ navLinks.forEach(link => {
                     const rotateX = -((e.clientY - centerY) / rect.height) * 25;
 
                     seat.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(15px) scale(1.08)`;
+
+                    // 툴팁이 활성화되어 있으면 마우스를 따라다니게
+                    if (activeElement === seat) {
+                        let tooltipX = e.clientX - tooltip.offsetWidth / 2;
+                        let tooltipY = e.clientY - tooltip.offsetHeight - 15;
+
+                        // 화면 경계 체크
+                        if (tooltipX < 10) tooltipX = 10;
+                        if (tooltipX + tooltip.offsetWidth > window.innerWidth - 10) {
+                            tooltipX = window.innerWidth - tooltip.offsetWidth - 10;
+                        }
+                        if (tooltipY < 10) tooltipY = e.clientY + 20;
+
+                        tooltip.style.left = tooltipX + 'px';
+                        tooltip.style.top = tooltipY + 'px';
+                    }
                 });
 
                 seat.addEventListener('mouseleave', () => {
@@ -1408,12 +1424,9 @@ navLinks.forEach(link => {
                     }
                 });
 
-                // 클릭 시 툴팁 표시/숨기기
+                // 클릭 시 툴팁 토글
                 seat.addEventListener('click', (e) => {
-                    const tooltipText = seat.dataset.tooltip;
-                    const seatName = seat.querySelector('.seat-name').textContent;
-
-                    // 같은 요소를 다시 클릭하면 툴팁 숨기기
+                    // 같은 요소를 다시 클릭하면 툴팁 끄기
                     if (activeElement === seat) {
                         tooltip.classList.remove('visible');
                         activeElement = null;
@@ -1421,10 +1434,11 @@ navLinks.forEach(link => {
                     }
 
                     // 툴팁 내용 설정
+                    const tooltipText = seat.dataset.tooltip;
+                    const seatName = seat.querySelector('.seat-name').textContent;
                     tooltip.innerHTML = `<div class="tooltip-title">${seatName}</div>${tooltipText}`;
 
                     // 툴팁 위치 계산 (마우스 위치 바로 위)
-                    const tooltipRect = tooltip.getBoundingClientRect();
                     let tooltipX = e.clientX - tooltip.offsetWidth / 2;
                     let tooltipY = e.clientY - tooltip.offsetHeight - 15;
 
@@ -1438,7 +1452,7 @@ navLinks.forEach(link => {
                     tooltip.style.left = tooltipX + 'px';
                     tooltip.style.top = tooltipY + 'px';
 
-                    // 툴팁 표시
+                    // 툴팁 켜기
                     tooltip.classList.add('visible');
                     activeElement = seat;
                 });
