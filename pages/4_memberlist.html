@@ -539,6 +539,62 @@
         .seat.PD { background: linear-gradient(135deg, #ffffff, #ffffff); border-color: #ffffff; }
         .common-space-seat { background: linear-gradient(135deg, #E0E0E0, #D0D0D0); border-color: #B8B8B8; }
 
+        /* 3D 호버링 효과를 위한 스타일 */
+        .seating-grid {
+            perspective: 1000px;
+        }
+        .common-space-seat {
+            transform-style: preserve-3d;
+            cursor: pointer;
+            transition: transform 0.15s ease-out, box-shadow 0.3s ease, filter 0.3s ease;
+        }
+        .common-space-seat:hover {
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(255, 215, 0, 0.4),
+                0 0 40px rgba(255, 215, 0, 0.2);
+            filter: brightness(1.1);
+        }
+
+        /* 툴팁 말풍선 스타일 */
+        .seat-tooltip {
+            position: fixed;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            color: #F0E68C;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            line-height: 1.5;
+            max-width: 280px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .seat-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .seat-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0 8px;
+            border-style: solid;
+            border-color: #1a1a1a transparent transparent transparent;
+        }
+        .seat-tooltip .tooltip-title {
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 6px;
+            font-size: 1em;
+        }
+
         /* 새로운 그리드 위치 지정 */
         .seat-entrance              { grid-column: 4 / span 2; grid-row: 1; } /* 현관 */
         .seat-storage               { grid-column: 1 / span 3; grid-row: 6; } /* 창고 */
@@ -573,9 +629,8 @@
         .seat-kimeojin              { grid-column: 5 / span 1; grid-row: 4; } /* 김어진 */
 
         .seat-ryu                   { grid-column: 6 / span 1; grid-row :4; } /* 류이레 */
-        .seat-pig                   { grid-column: 6 / span 1; grid-row :3; } /* 미정 */
-
-        .seat-empty-area-left       { grid-column: 5 / span 1; grid-row: 3 / span 1; } /* 빈자리 나중에 추가가능? */
+        .seat-ryuseongcheol         { grid-column: 6 / span 1; grid-row :3; } /* 류성철 */
+        .seat-leeseungeun           { grid-column: 5 / span 1; grid-row :3; } /* 이승은 */
 
 
 
@@ -938,8 +993,12 @@
                                     <span class="org-member-sub-title">애니메이터</span>
                                 </div>
                                 <div class="org-member-item">
-                                    <span class="org-member-name text-glow-effect">미정</span> <!-- 빈칸으로 남겨둠 -->
-                                    <span class="org-member-sub-title">신입 애니메이터</span> <!-- 빈칸으로 남겨둠 -->
+                                    <span class="org-member-name text-glow-effect">류성철</span>
+                                    <span class="org-member-sub-title">신입 애니메이터</span>
+                                </div>
+                                <div class="org-member-item">
+                                    <span class="org-member-name text-glow-effect">이승은</span>
+                                    <span class="org-member-sub-title">신입 애니메이터</span>
                                 </div>
                             </div>
                             <!-- Row 7 -->
@@ -1179,12 +1238,12 @@
                     </div>
                     <div class="seating-grid">
                         <!-- 1행 -->
-                        <div class="common-space-seat seat-storage"><span class="seat-name">창고</span></div>
-<div class="common-space-seat seat-lounge"><span class="seat-name">라운지</span></div>
-<div class="common-space-seat seat-tv"><span class="seat-name">TV</span></div>
-<div class="common-space-seat seat-pantry"><span class="seat-name">탕비실</span></div>
-<div class="common-space-seat seat-recording-room"><span class="seat-name">녹음실</span></div>
-<div class="common-space-seat seat-small-meeting-room"><span class="seat-name">소 회의실</span></div>
+                        <div class="common-space-seat seat-storage" data-tooltip="기자재들을 모아두는 곳입니다."><span class="seat-name">창고</span></div>
+<div class="common-space-seat seat-lounge" data-tooltip="매우 푹신한 소파가 있습니다!"><span class="seat-name">라운지</span></div>
+<div class="common-space-seat seat-tv" data-tooltip="밥 먹을때 봐도 좋고, 스위치, 플스 있으니 게임하면서 잠시 휴식해도 좋습니다."><span class="seat-name">TV</span></div>
+<div class="common-space-seat seat-pantry" data-tooltip="간식과 음료수, 영양제나 상비약, 공구들은 여기에 있습니다."><span class="seat-name">탕비실</span></div>
+<div class="common-space-seat seat-recording-room" data-tooltip="삐쭈님 녹음실, 가끔 삐쭈님과 면담을 하게 되면 여기서 하게 됩니다."><span class="seat-name">녹음실</span></div>
+<div class="common-space-seat seat-small-meeting-room" data-tooltip="소회의실, 간이 회의나 면담은 주로 이 곳에서 진행하게 됩니다."><span class="seat-name">소 회의실</span></div>
 
 <!--호카게들-->
 <div class="seat seat-anryucheon senior-designer"><span class="seat-name">안류천</span><span class="seat-title">선임 디자이너</span></div>
@@ -1216,19 +1275,18 @@
 <div class="seat seat-kimeojin animator"><span class="seat-name">김어진</span><span class="seat-title">애니메이터</span></div>
 
 <div class="seat seat-ryu animator"><span class="seat-name">류이레</span><span class="seat-title">애니메이터</span></div>
-<div class="seat seat-pig rokie-animator glow-effect"><span class="seat-name">미정</span><span class="seat-title">신입 애니메이터</span></div>
+<div class="seat seat-ryuseongcheol rokie-animator glow-effect"><span class="seat-name">류성철</span><span class="seat-title">신입 애니메이터</span></div>
+<div class="seat seat-leeseungeun rokie-animator glow-effect"><span class="seat-name">이승은</span><span class="seat-title">신입 애니메이터</span></div>
 
 
 
-<div class="common-space-seat seat-rest-area"><span class="seat-name">휴게실</span></div>
-<div class="common-space-seat seat-main-meeting-room"><span class="seat-name">대회의실</span></div>
+<div class="common-space-seat seat-rest-area" data-tooltip="안락한 안마의자가 있는 곳, 사용 중일 땐 꼭 사용중 표기하기!"><span class="seat-name">휴게실</span></div>
+<div class="common-space-seat seat-main-meeting-room" data-tooltip="시사, 월요위클리 및 공지사항 전파는 이 곳에서 합니다! 주로 저녁을 모여서 먹기도 합니다.<br>저녁 먹고난 뒤엔 꼭 치우기!"><span class="seat-name">대회의실</span></div>
 
 <div class="seat seat-wondongwoo senior-animator"><span class="seat-name">원동우</span><span class="seat-title">선임 애니메이터</span></div>
 
 <div class="common-space-seat seat-printer"><span class="seat-name">프린터</span></div>
-<div class="common-space-seat seat-entrance"><span class="seat-name">현관</span></div>
-
-<div class="seat-empty seat-empty-area-left"></div>
+<div class="common-space-seat seat-entrance" data-tooltip="매일 드나드는 곳"><span class="seat-name">현관</span></div>
                     </div>
                 </div>
             </div>
@@ -1314,6 +1372,108 @@ navLinks.forEach(link => {
             initialFadeElements.forEach(element => {
                 initialObserver.observe(element);
             });
+
+            // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+            // 3D 호버링 효과 및 툴팁 기능
+            // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+            const commonSpaceSeats = document.querySelectorAll('.common-space-seat[data-tooltip]');
+            let activeTooltip = null;
+            let activeElement = null;
+
+            // 툴팁 요소 생성
+            const tooltip = document.createElement('div');
+            tooltip.className = 'seat-tooltip';
+            document.body.appendChild(tooltip);
+
+            // 3D 호버링 효과
+            commonSpaceSeats.forEach(seat => {
+                // 마우스 진입 시 툴팁 바로 표시
+                seat.addEventListener('mouseenter', (e) => {
+                    const tooltipText = seat.dataset.tooltip;
+                    const seatName = seat.querySelector('.seat-name').textContent;
+                    tooltip.innerHTML = `<div class="tooltip-title">${seatName}</div>${tooltipText}`;
+
+                    // 초기 위치 설정
+                    let tooltipX = e.clientX - tooltip.offsetWidth / 2;
+                    let tooltipY = e.clientY - tooltip.offsetHeight - 15;
+
+                    if (tooltipX < 10) tooltipX = 10;
+                    if (tooltipX + tooltip.offsetWidth > window.innerWidth - 10) {
+                        tooltipX = window.innerWidth - tooltip.offsetWidth - 10;
+                    }
+                    if (tooltipY < 10) tooltipY = e.clientY + 20;
+
+                    tooltip.style.left = tooltipX + 'px';
+                    tooltip.style.top = tooltipY + 'px';
+
+                    tooltip.classList.add('visible');
+                    activeElement = seat;
+                });
+
+                seat.addEventListener('mousemove', (e) => {
+                    const rect = seat.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+
+                    const rotateY = ((e.clientX - centerX) / rect.width) * 25;
+                    const rotateX = -((e.clientY - centerY) / rect.height) * 25;
+
+                    seat.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(15px) scale(1.08)`;
+
+                    // 툴팁이 마우스를 따라다니게
+                    if (activeElement === seat) {
+                        let tooltipX = e.clientX - tooltip.offsetWidth / 2;
+                        let tooltipY = e.clientY - tooltip.offsetHeight - 15;
+
+                        if (tooltipX < 10) tooltipX = 10;
+                        if (tooltipX + tooltip.offsetWidth > window.innerWidth - 10) {
+                            tooltipX = window.innerWidth - tooltip.offsetWidth - 10;
+                        }
+                        if (tooltipY < 10) tooltipY = e.clientY + 20;
+
+                        tooltip.style.left = tooltipX + 'px';
+                        tooltip.style.top = tooltipY + 'px';
+                    }
+                });
+
+                seat.addEventListener('mouseleave', () => {
+                    seat.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)';
+
+                    // 마우스가 구역을 벗어나면 툴팁 숨기기
+                    tooltip.classList.remove('visible');
+                    activeElement = null;
+                });
+
+                // 클릭 시 툴팁 토글 (끄기/켜기)
+                seat.addEventListener('click', (e) => {
+                    if (tooltip.classList.contains('visible')) {
+                        tooltip.classList.remove('visible');
+                        activeElement = null;
+                    } else {
+                        const tooltipText = seat.dataset.tooltip;
+                        const seatName = seat.querySelector('.seat-name').textContent;
+                        tooltip.innerHTML = `<div class="tooltip-title">${seatName}</div>${tooltipText}`;
+
+                        let tooltipX = e.clientX - tooltip.offsetWidth / 2;
+                        let tooltipY = e.clientY - tooltip.offsetHeight - 15;
+
+                        if (tooltipX < 10) tooltipX = 10;
+                        if (tooltipX + tooltip.offsetWidth > window.innerWidth - 10) {
+                            tooltipX = window.innerWidth - tooltip.offsetWidth - 10;
+                        }
+                        if (tooltipY < 10) tooltipY = e.clientY + 20;
+
+                        tooltip.style.left = tooltipX + 'px';
+                        tooltip.style.top = tooltipY + 'px';
+
+                        tooltip.classList.add('visible');
+                        activeElement = seat;
+                    }
+                });
+            });
+            // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+            // 3D 호버링 효과 및 툴팁 기능 끝
+            // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
         });
     </script>
 </body>

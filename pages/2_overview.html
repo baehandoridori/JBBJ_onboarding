@@ -64,6 +64,85 @@
         .footer-logo { margin-top: 60px; margin-bottom: 30px; text-align: center; } .footer-logo img { width: 120px; height: auto; opacity: 0.6; transition: opacity 0.3s ease; } .footer-logo img:hover { opacity: 1; }
         body::-webkit-scrollbar { width: 8px; } body::-webkit-scrollbar-track { background: var(--page-bg); } body::-webkit-scrollbar-thumb { background-color: var(--accent-yellow); border-radius: 10px; }
         .initial-fade-in { opacity: 0; transform: translateY(50px); } .initial-fade-in.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* 멤버십 수익 세계 1위 글로우 효과 */
+        .world-number-one {
+            display: inline-block;
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 1.15em;
+            cursor: pointer;
+            position: relative;
+            padding: 2px 8px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+            text-shadow:
+                0 0 10px rgba(255, 215, 0, 0.8),
+                0 0 20px rgba(255, 215, 0, 0.6),
+                0 0 30px rgba(255, 215, 0, 0.4),
+                0 0 40px rgba(255, 165, 0, 0.3);
+            animation: worldNumberOneGlow 2s ease-in-out infinite alternate;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .world-number-one:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+        @keyframes worldNumberOneGlow {
+            0% {
+                text-shadow:
+                    0 0 10px rgba(255, 215, 0, 0.8),
+                    0 0 20px rgba(255, 215, 0, 0.6),
+                    0 0 30px rgba(255, 215, 0, 0.4);
+                filter: brightness(1);
+            }
+            100% {
+                text-shadow:
+                    0 0 15px rgba(255, 215, 0, 1),
+                    0 0 30px rgba(255, 215, 0, 0.8),
+                    0 0 45px rgba(255, 215, 0, 0.6),
+                    0 0 60px rgba(255, 165, 0, 0.4);
+                filter: brightness(1.2);
+            }
+        }
+
+        /* 빵빠레(Confetti) 애니메이션 */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+        @keyframes confetti-fall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg) scale(0.5);
+            }
+        }
+        .confetti-star {
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+        .confetti-circle {
+            border-radius: 50%;
+        }
+        .confetti-rect {
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
@@ -153,7 +232,7 @@
             // 텍스트 설정
             const cardTexts = {
                 card1: `STUDIO JBBJ에 오신 것을 진심으로 환영합니다!<br><br>스튜디오 장삐쭈는 2016 년에 설립되어<br>유튜브 '장삐쭈' 채널을 통해 시청자들에게 차원이 다른 색다른 재미를 선사해 왔습니다.<br>그리고 2025년 현재 우리는, 새로운 세계 [ 사우스 코리안 파크 ] 에서 즐거운 도전을 이어 나가고 있습니다!`,
-                card2: `[사우스 코리안 파크] 는 지난 2 년 동안<br>약 200편의 단편과 13편의 오리지날 시리즈를 선보였으며,<br>10 만 명 이상의 멤버십 팬들과 함께하는<br>대한민국 최고의 블랙 코미디 애니메이션입니다.<br>대한민국을 넘어선 글로벌 무대에서 <span class="newbie-name">${newbieName}</span>님과 함께 펼쳐 나갈 위대한 여정이 정말 기대되네요!`,
+                card2: `[사우스 코리안 파크] 는 지난 2 년 동안<br>약 200편의 단편과 13편의 오리지날 시리즈를 선보였으며,<br>10 만 명 이상의 멤버십 팬들과 함께하는<br>대한민국 최고의 블랙 코미디 애니메이션입니다.<br><br>현재 국내를 넘어 전 세계 유튜브 채널 중<br><span class="world-number-one" id="worldNumberOne">🏆 멤버십 수익 세계 1위 🏆</span><br>라는 놀라운 기록을 세우고 있습니다!<br><br>글로벌 무대에서 <span class="newbie-name">${newbieName}</span>님과 함께 펼쳐 나갈<br>위대한 여정이 정말 기대되네요!`,
                 card3: `우리의 핵심 가치는 바로 '상호 존중(리스펙)' 입니다!<br><br>[시간 박은 사람에게 '무조건' 리스펙 하라] 는 삐쭈님 말씀에 따라<br>모두가 자신보다 분야별로 시간을 박은 지원들에게 무한 리스펙하며<br>시간을 박은 사람도 다른 직원들의 의견을 가볍게 여기지 않고 한 번 더 고민해 보는<br>열린 분위기 속에서 모든 창작이 이루어집니다.<br>모두의 목소리와 열정이 존중받는 스장에서 <span class="newbie-name">${newbieName}</span>님의 재능을 마음껏 펼쳐 주세요!`,
                 card4: `이제 <span class="newbie-name">${newbieName}</span> 님도 이 멋진 여정의 주인공입니다.<br>서로 존중하고 지지하며, 함께 멋진 작품을 만드는<br>모습을 상상하니 벌써 가슴이 뛰는 것 같네요!<br>여러분의 빛나는 아이디어가 현실이 되는 곳,<br>STUDIO JBBJ 가 <span class="newbie-name">${newbieName}</span> 님의 힘찬 첫 걸음을 뜨겁게 응원합니다!`
             };
@@ -196,6 +275,42 @@
                 });
             }, observerOptions);
             animatedElements.forEach(element => { initialObserver.observe(element); });
+
+            // 빵빠레(Confetti) 애니메이션 함수
+            function createConfetti() {
+                const container = document.createElement('div');
+                container.className = 'confetti-container';
+                document.body.appendChild(container);
+
+                const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE'];
+                const shapes = ['confetti-star', 'confetti-circle', 'confetti-rect'];
+
+                // 100개의 confetti 생성
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = `confetti ${shapes[Math.floor(Math.random() * shapes.length)]}`;
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = -20 + 'px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = (Math.random() * 10 + 8) + 'px';
+                    confetti.style.height = (Math.random() * 10 + 8) + 'px';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                    container.appendChild(confetti);
+                }
+
+                // 3.5초 후 컨테이너 제거
+                setTimeout(() => {
+                    container.remove();
+                }, 3500);
+            }
+
+            // 멤버십 수익 세계 1위 클릭 이벤트 (동적으로 생성되므로 이벤트 위임 사용)
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('world-number-one')) {
+                    createConfetti();
+                }
+            });
         });
     </script>
 </body>
