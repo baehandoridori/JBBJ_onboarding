@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신입사원 체크리스트 - Studio jbbj 온보딩</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --page-bg: #1A1A1A; --text-primary: #F0E68C; --text-secondary: #cccccc; --text-muted: #BDBDBD;
+            --accent-yellow: #FFD700; --accent-green: #4CAF50; --box-bg: #282828; --box-shadow: rgba(0,0,0,0.3);
+            --hashtag-bg: #444; --theme-toggle-bg: #333; --theme-toggle-icon: #FFD700;
+            --section-divider-color: #444; --checkbox-bg: #3a3a3a; --checkbox-checked-bg: var(--accent-green);
+            --font-primary: 'Noto Sans KR', 'Spoqa Han Sans Neo', sans-serif;
+        }
+        [data-theme="light"] {
+            --page-bg: #F8F9FA; --text-primary: #212529; --text-secondary: #555555; --text-muted: #6c757d;
+            --accent-yellow: #EAA600; --accent-green: #388E3C; --box-bg: #FFFFFF; --box-shadow: rgba(0,0,0,0.1);
+            --hashtag-bg: #e9ecef; --theme-toggle-bg: #e0e0e0; --theme-toggle-icon: #EAA600;
+            --section-divider-color: #ddd; --checkbox-bg: #e0e0e0; --checkbox-checked-bg: var(--accent-green);
+        }
+
+        body, html { margin: 0; padding: 0; width: 100%; font-family: var(--font-primary); background-color: var(--page-bg); color: var(--text-primary); overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* 공통 스타일: 사이드바, 테마 토글 */
+        .sidebar-toggle{position:fixed;top:20px;left:20px;width:50px;height:50px;background-color:var(--theme-toggle-bg);border:none;border-radius:50%;z-index:1003;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:12px;box-shadow:0 2px 10px var(--box-shadow)}.sidebar-toggle span{display:block;width:100%;height:3px;background-color:var(--theme-toggle-icon);border-radius:3px;transition:transform .3s ease,opacity .3s ease}.sidebar-open .sidebar-toggle span:nth-child(1){transform:translateY(8px) rotate(45deg)}.sidebar-open .sidebar-toggle span:nth-child(2){opacity:0}.sidebar-open .sidebar-toggle span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}.sidebar{position:fixed;top:0;left:0;width:280px;height:100vh;background-color:var(--box-bg);z-index:1002;padding:80px 20px 20px 20px;box-sizing:border-box;transform:translateX(-100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94);border-right:1px solid var(--section-divider-color)}.sidebar-open .sidebar{transform:translateX(0)}.sidebar-title{color:var(--text-primary);font-size:1.4em;font-weight:500;margin:0 0 20px 0;padding-bottom:15px;border-bottom:1px solid var(--section-divider-color)}.sidebar-nav-list{list-style:none;padding:0;margin:0}.sidebar-nav-list li{margin-bottom:5px}.sidebar-nav-link{display:block;text-decoration:none;color:var(--text-secondary);padding:12px 15px;border-radius:8px;font-size:1.05em;font-weight:500;transition:background-color .2s,color .2s}.sidebar-nav-link:hover{background-color:var(--hashtag-bg);color:var(--text-primary)}.sidebar-nav-link.active{background-color:var(--accent-yellow);color:var(--box-bg) !important;font-weight:700}[data-theme=light] .sidebar-nav-link.active{color:#fff !important}.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:1001;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}.sidebar-open .overlay{opacity:1;visibility:visible}.page-wrapper{transition:transform .4s cubic-bezier(.25,.46,.45,.94);width:100%}.sidebar-open .page-wrapper{transform:translateX(280px)}
+        .theme-toggle-button { position: fixed; top: 25px; right: 25px; width: 50px; height: 50px; background-color: var(--theme-toggle-bg); color: var(--theme-toggle-icon); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5em; cursor: pointer; box-shadow: 0 2px 10px var(--box-shadow); z-index: 1001; }
+        .theme-toggle-button:hover { transform: scale(1.1); } .theme-toggle-button .fa-sun { display: none; } [data-theme="light"] .theme-toggle-button .fa-sun { display: inline-block; } [data-theme="light"] .theme-toggle-button .fa-moon { display: none; }
+
+        .page-container { width: 100%; max-width: 900px; margin: 0 auto; padding: 60px 20px; box-sizing: border-box; }
+        .section-title { text-align: center; font-size: 2.8em; color: var(--accent-yellow); margin-bottom: 20px; font-weight: 700; text-shadow: 1px 1px 6px var(--box-shadow); }
+        .section-subtitle { text-align: center; font-size: 1em; color: var(--text-muted); margin-bottom: 40px; }
+
+        /* 진행률 바 */
+        .progress-container { background-color: var(--box-bg); padding: 25px 30px; border-radius: 15px; box-shadow: 0 5px 15px var(--box-shadow); margin-bottom: 30px; }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .progress-title { font-size: 1.2em; color: var(--text-primary); font-weight: 500; }
+        .progress-percentage { font-size: 1.5em; color: var(--accent-yellow); font-weight: 700; }
+        .progress-bar-bg { width: 100%; height: 12px; background-color: var(--checkbox-bg); border-radius: 6px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-yellow), var(--accent-green)); border-radius: 6px; transition: width 0.5s ease-out; width: 0%; }
+
+        /* 체크리스트 카드 */
+        .checklist-card { background-color: var(--box-bg); padding: 25px 30px; border-radius: 15px; box-shadow: 0 5px 15px var(--box-shadow); margin-bottom: 20px; }
+        .checklist-card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--section-divider-color); }
+        .checklist-card-header i { font-size: 1.5em; color: var(--accent-yellow); }
+        .checklist-card-title { font-size: 1.4em; color: var(--accent-yellow); font-weight: 600; margin: 0; }
+        .checklist-card-desc { font-size: 0.9em; color: var(--text-muted); margin-left: auto; }
+
+        /* 체크리스트 아이템 */
+        .checklist-items { display: flex; flex-direction: column; gap: 12px; }
+        .checklist-item { display: flex; align-items: center; gap: 15px; padding: 15px; background-color: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer; transition: all 0.2s ease; border: 1px solid transparent; }
+        [data-theme="light"] .checklist-item { background-color: rgba(0,0,0,0.02); }
+        .checklist-item:hover { background-color: rgba(255,215,0,0.08); border-color: var(--accent-yellow); }
+        .checklist-item.checked { background-color: rgba(76,175,80,0.1); }
+        .checklist-item.checked:hover { background-color: rgba(76,175,80,0.15); border-color: var(--accent-green); }
+
+        /* 커스텀 체크박스 */
+        .custom-checkbox { width: 28px; height: 28px; border-radius: 8px; background-color: var(--checkbox-bg); display: flex; justify-content: center; align-items: center; flex-shrink: 0; transition: all 0.3s ease; border: 2px solid transparent; }
+        .checklist-item:hover .custom-checkbox { border-color: var(--accent-yellow); }
+        .checklist-item.checked .custom-checkbox { background-color: var(--checkbox-checked-bg); border-color: var(--checkbox-checked-bg); }
+        .custom-checkbox i { color: #fff; font-size: 0.9em; opacity: 0; transform: scale(0); transition: all 0.2s ease; }
+        .checklist-item.checked .custom-checkbox i { opacity: 1; transform: scale(1); }
+
+        .item-content { flex: 1; }
+        .item-title { font-size: 1.05em; color: var(--text-secondary); font-weight: 500; transition: all 0.2s ease; }
+        .checklist-item.checked .item-title { color: var(--text-muted); text-decoration: line-through; }
+        .item-description { font-size: 0.85em; color: var(--text-muted); margin-top: 4px; }
+        .checklist-item.checked .item-description { opacity: 0.6; }
+
+        /* 담당자 태그 */
+        .item-assignee { font-size: 0.8em; padding: 4px 10px; background-color: var(--hashtag-bg); color: var(--text-muted); border-radius: 12px; white-space: nowrap; }
+
+        /* 리셋 버튼 */
+        .reset-button { display: block; margin: 30px auto 0; padding: 12px 25px; font-size: 0.95em; color: var(--text-muted); background-color: transparent; border: 1px solid var(--text-muted); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
+        .reset-button:hover { color: var(--accent-yellow); border-color: var(--accent-yellow); }
+
+        /* 완료 메시지 */
+        .completion-message { display: none; text-align: center; padding: 40px; background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(255,215,0,0.1)); border-radius: 15px; margin-top: 30px; }
+        .completion-message.show { display: block; animation: fadeIn 0.5s ease; }
+        .completion-message h2 { color: var(--accent-green); font-size: 1.8em; margin: 0 0 15px 0; }
+        .completion-message p { color: var(--text-secondary); font-size: 1.1em; margin: 0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .page-navigation { margin-top: 40px; display: flex; gap: 20px; justify-content: center; width: 100%; }
+        .nav-button { padding: 12px 25px; font-size: 1em; font-weight: 500; color: var(--page-bg); background-color: var(--accent-yellow); border: none; border-radius: 8px; cursor: pointer; text-decoration: none; transition: all 0.2s ease; }
+        .nav-button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        body::-webkit-scrollbar { width: 8px; } body::-webkit-scrollbar-track { background: var(--page-bg); } body::-webkit-scrollbar-thumb { background-color: var(--accent-yellow); border-radius: 10px; }
+        .initial-fade-in { opacity: 0; transform: translateY(30px); } .initial-fade-in.is-visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+    <nav class="sidebar" id="sidebar">
+        <h3 class="sidebar-title">온보딩 메뉴</h3>
+        <ul class="sidebar-nav-list">
+            <li><a href="2_overview.html" class="sidebar-nav-link">🚀 스튜디오 둘러보기</a></li>
+            <li><a href="3_mento.html" class="sidebar-nav-link">🧑‍🏫 멘토 소개</a></li>
+            <li><a href="4_memberlist.html" class="sidebar-nav-link">🧑‍🤝‍🧑 팀원 소개</a></li>
+            <li><a href="5_process.html" class="sidebar-nav-link">⚙️ 제작 과정</a></li>
+            <li><a href="6_checklist.html" class="sidebar-nav-link">✅ 신입사원 체크리스트</a></li>
+            <li><a href="7_communication-page.html" class="sidebar-nav-link">📝 필수 정보</a></li>
+        </ul>
+    </nav>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="page-wrapper" id="pageWrapper">
+        <div class="theme-toggle-button" id="themeToggleButton" title="테마 변경"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></div>
+
+        <div class="page-container">
+            <h1 class="section-title initial-fade-in">신입사원 체크리스트</h1>
+            <p class="section-subtitle initial-fade-in">입사 후 완료해야 할 항목들이에요. 하나씩 체크해 나가세요!</p>
+
+            <!-- 진행률 -->
+            <div class="progress-container initial-fade-in">
+                <div class="progress-header">
+                    <span class="progress-title">전체 진행률</span>
+                    <span class="progress-percentage" id="progressPercentage">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                </div>
+            </div>
+
+            <!-- 계정 및 권한 설정 -->
+            <div class="checklist-card initial-fade-in" id="accountSection">
+                <div class="checklist-card-header">
+                    <i class="fas fa-user-shield"></i>
+                    <h2 class="checklist-card-title">계정 및 권한 설정</h2>
+                    <span class="checklist-card-desc" id="accountProgress">0/6</span>
+                </div>
+                <div class="checklist-items" id="accountItems">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+            </div>
+
+            <!-- 업무 도구 설정 -->
+            <div class="checklist-card initial-fade-in" id="toolSection">
+                <div class="checklist-card-header">
+                    <i class="fas fa-tools"></i>
+                    <h2 class="checklist-card-title">업무 도구 설정</h2>
+                    <span class="checklist-card-desc" id="toolProgress">0/4</span>
+                </div>
+                <div class="checklist-items" id="toolItems">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+            </div>
+
+            <!-- 복지 및 생활 -->
+            <div class="checklist-card initial-fade-in" id="welfareSection">
+                <div class="checklist-card-header">
+                    <i class="fas fa-heart"></i>
+                    <h2 class="checklist-card-title">복지 및 생활</h2>
+                    <span class="checklist-card-desc" id="welfareProgress">0/3</span>
+                </div>
+                <div class="checklist-items" id="welfareItems">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+            </div>
+
+            <!-- 완료 메시지 -->
+            <div class="completion-message" id="completionMessage">
+                <h2>🎉 모든 준비가 완료되었습니다!</h2>
+                <p>이제 본격적으로 스튜디오 생활을 시작할 준비가 되었어요!</p>
+            </div>
+
+            <button class="reset-button" id="resetButton">체크리스트 초기화</button>
+
+            <div class="page-navigation initial-fade-in">
+                <a href="5_process.html" class="nav-button prev-button">이전 (제작 과정)</a>
+                <a href="7_communication-page.html" class="nav-button next-button">다음 (필수 정보)</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 공통 기능: 사이드바, 테마 토글
+            const sidebarToggle=document.getElementById("sidebarToggle"),sidebar=document.getElementById("sidebar"),overlay=document.getElementById("overlay");function toggleSidebar(){document.body.classList.toggle("sidebar-open")}sidebarToggle&&sidebarToggle.addEventListener("click",toggleSidebar),overlay&&overlay.addEventListener("click",toggleSidebar);const currentPath=window.location.pathname,navLinks=document.querySelectorAll(".sidebar-nav-link");navLinks.forEach(e=>{currentPath.endsWith(e.getAttribute("href"))&&e.classList.add("active")});const themeToggleButton=document.getElementById("themeToggleButton"),currentTheme=localStorage.getItem("themePreference");function applyTheme(e){document.body.dataset.theme=e,"light"===e?(themeToggleButton.querySelector(".fa-moon").style.display="none",themeToggleButton.querySelector(".fa-sun").style.display="inline-block"):(themeToggleButton.querySelector(".fa-sun").style.display="none",themeToggleButton.querySelector(".fa-moon").style.display="inline-block")}currentTheme?applyTheme(currentTheme):applyTheme("dark"),themeToggleButton.addEventListener("click",()=>{let e="dark"===document.body.dataset.theme?"light":"dark";applyTheme(e),localStorage.setItem("themePreference",e)});
+
+            // 초기 등장 애니메이션
+            const initialFadeElements = document.querySelectorAll('.initial-fade-in');
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+            const initialObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            initialFadeElements.forEach(el => initialObserver.observe(el));
+
+            // 체크리스트 데이터
+            const checklistData = {
+                account: [
+                    { id: 'google-studio', title: '구글 스튜디오 계정 생성', description: 'studiojbbj.com 구글 워크스페이스 계정', assignee: '배한솔' },
+                    { id: 'adobe', title: '어도비 계정 권한 부여', description: 'Adobe Creative Cloud 라이선스 연동', assignee: '배한솔' },
+                    { id: 'google-drive', title: '구글 드라이브 권한', description: '공유 드라이브 접근 권한 확인', assignee: '배한솔' },
+                    { id: 'slack', title: 'Slack 워크스페이스 가입', description: 'studiojbbj Slack 채널 참여', assignee: '허혜원' },
+                    { id: 'notion', title: 'Notion 워크스페이스 초대', description: '프로젝트 관리 및 문서 접근', assignee: '허혜원' },
+                    { id: 'parsec', title: '파섹(Parsec) 계정 연결', description: '원격 작업을 위한 파섹 설정', assignee: '배한솔' }
+                ],
+                tool: [
+                    { id: 'moho', title: '모호 유니버스 교육용 커넥터 체크', description: 'Moho 애니메이션 소프트웨어 라이선스', assignee: '안류천' },
+                    { id: 'pc-setup', title: 'PC 및 작업 환경 세팅', description: '모니터, 키보드, 마우스 등 장비 확인', assignee: '배한솔' },
+                    { id: 'file-structure', title: '프로젝트 폴더 구조 숙지', description: '드라이브 내 폴더 구조 파악', assignee: '멘토' },
+                    { id: 'naming-convention', title: '파일 네이밍 규칙 확인', description: '작업 파일 명명 규칙 학습', assignee: '멘토' }
+                ],
+                welfare: [
+                    { id: 'biz-taxi', title: '비즈니스 택시 등록', description: '카카오T 비즈니스 앱 설정', assignee: '배한솔' },
+                    { id: 'vacation-system', title: '휴가 시스템 사용법 확인', description: 'Slack 휴가 워크플로 테스트', assignee: '배한솔' },
+                    { id: 'meal-channel', title: '#식사를-합시다 채널 참여', description: '점심/저녁 식사 채널 가입', assignee: '본인' }
+                ]
+            };
+
+            // localStorage에서 체크 상태 불러오기
+            const STORAGE_KEY = 'jbbj_onboarding_checklist';
+            let checkedItems = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+            // 체크리스트 아이템 렌더링 함수
+            function renderChecklistItems(containerId, items) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = items.map(item => `
+                    <div class="checklist-item ${checkedItems[item.id] ? 'checked' : ''}" data-id="${item.id}">
+                        <div class="custom-checkbox">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="item-content">
+                            <div class="item-title">${item.title}</div>
+                            <div class="item-description">${item.description}</div>
+                        </div>
+                        <span class="item-assignee">${item.assignee}</span>
+                    </div>
+                `).join('');
+
+                // 클릭 이벤트 추가
+                container.querySelectorAll('.checklist-item').forEach(itemEl => {
+                    itemEl.addEventListener('click', () => {
+                        const id = itemEl.dataset.id;
+                        checkedItems[id] = !checkedItems[id];
+                        itemEl.classList.toggle('checked');
+                        saveAndUpdateProgress();
+                    });
+                });
+            }
+
+            // 진행률 업데이트 함수
+            function saveAndUpdateProgress() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedItems));
+
+                const allItems = [...checklistData.account, ...checklistData.tool, ...checklistData.welfare];
+                const totalCount = allItems.length;
+                const checkedCount = allItems.filter(item => checkedItems[item.id]).length;
+                const percentage = Math.round((checkedCount / totalCount) * 100);
+
+                // 전체 진행률 업데이트
+                document.getElementById('progressPercentage').textContent = `${percentage}%`;
+                document.getElementById('progressBarFill').style.width = `${percentage}%`;
+
+                // 섹션별 진행률 업데이트
+                const accountChecked = checklistData.account.filter(item => checkedItems[item.id]).length;
+                const toolChecked = checklistData.tool.filter(item => checkedItems[item.id]).length;
+                const welfareChecked = checklistData.welfare.filter(item => checkedItems[item.id]).length;
+
+                document.getElementById('accountProgress').textContent = `${accountChecked}/${checklistData.account.length}`;
+                document.getElementById('toolProgress').textContent = `${toolChecked}/${checklistData.tool.length}`;
+                document.getElementById('welfareProgress').textContent = `${welfareChecked}/${checklistData.welfare.length}`;
+
+                // 100% 완료 시 축하
+                const completionMessage = document.getElementById('completionMessage');
+                if (percentage === 100) {
+                    completionMessage.classList.add('show');
+                    // 빵빠레 효과
+                    confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+                } else {
+                    completionMessage.classList.remove('show');
+                }
+            }
+
+            // 초기 렌더링
+            renderChecklistItems('accountItems', checklistData.account);
+            renderChecklistItems('toolItems', checklistData.tool);
+            renderChecklistItems('welfareItems', checklistData.welfare);
+            saveAndUpdateProgress();
+
+            // 리셋 버튼
+            document.getElementById('resetButton').addEventListener('click', () => {
+                if (confirm('체크리스트를 초기화하시겠습니까?')) {
+                    checkedItems = {};
+                    localStorage.removeItem(STORAGE_KEY);
+                    renderChecklistItems('accountItems', checklistData.account);
+                    renderChecklistItems('toolItems', checklistData.tool);
+                    renderChecklistItems('welfareItems', checklistData.welfare);
+                    saveAndUpdateProgress();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
